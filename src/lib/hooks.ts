@@ -89,7 +89,7 @@ export function useSearch() {
   };
 }
 
-// --- Auth (Google SSO) ---
+// --- Auth (Google SSO + email fallback) ---
 export interface User {
   id: string;
   name: string;
@@ -113,7 +113,6 @@ function decodeJwt(token: string): Record<string, string> {
   return JSON.parse(jsonPayload);
 }
 
-// Google Client ID - users should replace with their own from Google Cloud Console
 const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "";
 
 export function useAuth() {
@@ -128,7 +127,6 @@ export function useAuth() {
     } catch {}
   }, []);
 
-  // Load Google Identity Services script
   useEffect(() => {
     if (!GOOGLE_CLIENT_ID) return;
     if (document.getElementById("google-gsi-script")) {
@@ -174,7 +172,6 @@ export function useAuth() {
     google.accounts.id.prompt();
   }, [googleLoaded, handleGoogleResponse]);
 
-  // Fallback login for when Google Client ID isn't configured
   const loginWithEmail = useCallback((name: string, email: string) => {
     const u: User = { id: crypto.randomUUID(), name, email };
     localStorage.setItem("sfpopos_user", JSON.stringify(u));

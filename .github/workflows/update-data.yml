@@ -1,0 +1,35 @@
+name: Update POPOS Data
+
+on:
+  schedule:
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx tsx scripts/update-popos-data.ts
+      - name: Check for changes
+        id: diff
+        run: |
+          git diff --quiet src/data/popos.ts || echo "changed=true" >> "$GITHUB_OUTPUT"
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/popos.ts
+          git commit -m "chore: auto-update POPOS data from DataSF"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

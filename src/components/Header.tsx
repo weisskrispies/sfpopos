@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, User, LogOut } from "lucide-react";
+import { MapPin, User, LogOut, Download } from "lucide-react";
 import { User as UserType } from "@/lib/hooks";
 
 interface HeaderProps {
@@ -9,6 +9,9 @@ interface HeaderProps {
   onLogout: () => void;
   activeView: "list" | "map";
   onViewChange: (view: "list" | "map") => void;
+  isAdmin?: boolean;
+  onExportData?: () => void;
+  editCount?: number;
 }
 
 export default function Header({
@@ -17,6 +20,9 @@ export default function Header({
   onLogout,
   activeView,
   onViewChange,
+  isAdmin,
+  onExportData,
+  editCount,
 }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[var(--border)]">
@@ -75,6 +81,20 @@ export default function Header({
                 <span className="text-sm font-medium hidden sm:block">
                   {user.name}
                 </span>
+                {isAdmin && onExportData && (
+                  <button
+                    onClick={onExportData}
+                    className="relative p-1.5 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
+                    title={`Export data${editCount ? ` (${editCount} edits)` : ""}`}
+                  >
+                    <Download className="w-4 h-4" />
+                    {editCount ? (
+                      <span className="absolute -top-1 -right-1 w-4 h-4 bg-[var(--primary)] text-white text-[10px] rounded-full flex items-center justify-center">
+                        {editCount}
+                      </span>
+                    ) : null}
+                  </button>
+                )}
                 <button
                   onClick={onLogout}
                   className="p-1.5 text-[var(--muted)] hover:text-[var(--foreground)] transition-colors"
