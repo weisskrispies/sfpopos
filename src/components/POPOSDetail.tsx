@@ -71,7 +71,15 @@ export default function POPOSDetail({
           <div
             className={`relative w-full aspect-[16/9] ${gradient} flex items-center justify-center`}
           >
-            <span className="text-7xl opacity-80">{emoji}</span>
+            {popos.images[0] && !popos.images[0].includes("placeholder") ? (
+              <img
+                src={popos.images[0]}
+                alt={popos.name}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-7xl opacity-80">{emoji}</span>
+            )}
             <div className="absolute bottom-4 left-4">
               <span className="px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium">
                 {popos.type}

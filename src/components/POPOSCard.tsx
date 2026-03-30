@@ -36,11 +36,20 @@ export default function POPOSCard({
     >
       {/* Image */}
       <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-3">
-        <div
-          className={`absolute inset-0 ${gradient} flex items-center justify-center`}
-        >
-          <span className="text-5xl opacity-80">{emoji}</span>
-        </div>
+        {popos.images[0] && !popos.images[0].includes("placeholder") ? (
+          <img
+            src={popos.images[0]}
+            alt={popos.name}
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        ) : (
+          <div
+            className={`absolute inset-0 ${gradient} flex items-center justify-center`}
+          >
+            <span className="text-5xl opacity-80">{emoji}</span>
+          </div>
+        )}
 
         {/* Actions overlay */}
         <div className="absolute top-3 right-3 flex gap-2">

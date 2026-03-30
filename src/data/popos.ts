@@ -79,7 +79,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Trees", "Fountain", "Public Art", "Literary Walk"],
     hours: "Mon-Fri 7:00 AM - 5:30 PM",
     accessibility: "Fully wheelchair accessible",
-    images: ["/images/placeholder.jpg"],
+    images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Transamerica_Redwood_Park_1.JPG/800px-Transamerica_Redwood_Park_1.JPG"],
     yearOpened: "1972",
     transitNearby: ["BART - Montgomery", "Muni - 10, 12, 30, 45"],
     howToFind: "Look for the grove of redwood trees at the base of the Transamerica Pyramid. The park entrance is on the east side of the building, accessible from Montgomery Street between Washington and Clay. Note: may be closed during the Pyramid renovation."
@@ -129,7 +129,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Garden", "Lawn", "Fountain", "Views"],
     hours: "Mon-Sat 10:00 AM - 6:00 PM",
     accessibility: "Elevator access from galleria",
-    images: ["/images/placeholder.jpg"],
+    images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Crocker_Galleria_interior_1.JPG/800px-Crocker_Galleria_interior_1.JPG"],
     yearOpened: "1983",
     transitNearby: ["BART - Montgomery", "Muni - 2, 3, 38"],
     howToFind: "Enter the Crocker Galleria at 50 Post Street (between Montgomery and Kearny). Take the escalators or elevator to the top floor, then follow signs to the rooftop terrace. The rooftop exit is in the northwest corner of the Galleria."
@@ -142,11 +142,11 @@ export const poposData: POPOS[] = [
     lat: 37.7884,
     lng: -122.3986,
     type: "Plaza",
-    description: "A modern, sunlit plaza at the base of a sleek glass tower in the heart of SoMa. The centerpiece is a striking kinetic wind sculpture by artist Ned Kahn that ripples like water across the building facade. Moveable chairs and tables let visitors arrange their own seating.",
+    description: "A modern, sunlit plaza at the base of a sleek glass tower in the heart of SoMa. The 500 block of Mission has POPOS left and right, but for art nothing compares to the colorful sculpture of stacked people and the grinning heads. Moveable chairs and tables let visitors arrange their own seating.",
     features: ["Seating", "Public Art", "Moveable Furniture", "Trees", "Food Nearby"],
     hours: "Open 24 hours",
     accessibility: "Fully wheelchair accessible",
-    images: ["/images/placeholder.jpg"],
+    images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/555_Mission_Street_July_2008.JPG/800px-555_Mission_Street_July_2008.JPG"],
     yearOpened: "2008",
     transitNearby: ["BART - Montgomery", "Muni - 10, 14, 38"]
   },
@@ -162,7 +162,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Gardens", "Walking Trail", "Amphitheater", "Playground", "Restrooms", "Wi-Fi", "Bus Stop", "Food & Drink"],
     hours: "Daily 6:00 AM - 8:00 PM",
     accessibility: "Fully wheelchair accessible, gondola and elevator access",
-    images: ["/images/placeholder.jpg"],
+    images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Salesforce_Tower_from_Salesforce_Park.jpg/800px-Salesforce_Tower_from_Salesforce_Park.jpg"],
     yearOpened: "2018",
     transitNearby: ["Salesforce Transit Center", "BART - Montgomery", "Muni - Multiple lines"],
     howToFind: "Access Salesforce Park via the gondola at Fremont and Mission streets, or take elevators inside the Salesforce Transit Center (at 1st and Mission or Fremont and Natoma). The park is on the rooftop level — you can't miss the greenery from below."
@@ -179,7 +179,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Gardens", "Waterfall", "Playground", "Ice Rink", "Art Gallery", "Restrooms", "Events", "Lawn"],
     hours: "Daily 6:00 AM - 10:00 PM",
     accessibility: "Fully wheelchair accessible throughout",
-    images: ["/images/placeholder.jpg"],
+    images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Yerba_Buena_Gardens_-_Esplanade.JPG/800px-Yerba_Buena_Gardens_-_Esplanade.JPG"],
     yearOpened: "1993",
     transitNearby: ["BART - Montgomery/Powell", "Muni - 14, 30, 45"]
   },
@@ -195,7 +195,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Public Art", "Bay Views", "Walking Path", "Lawn", "Dog Friendly"],
     hours: "Open 24 hours",
     accessibility: "Fully wheelchair accessible",
-    images: ["/images/placeholder.jpg"],
+    images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Skyscrapers_and_Rincon_Park_along_the_Embarcadero,_SF.jpg/800px-Skyscrapers_and_Rincon_Park_along_the_Embarcadero,_SF.jpg"],
     yearOpened: "2002",
     transitNearby: ["BART - Embarcadero", "Muni - N, T Lines"]
   },
