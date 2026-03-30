@@ -89,16 +89,38 @@ export function useSearch() {
   };
 }
 
-// --- Auth (localStorage-based for MVP) ---
+// --- Auth (Google SSO) ---
 export interface User {
   id: string;
   name: string;
   email: string;
+  picture?: string;
 }
+
+interface GoogleCredentialResponse {
+  credential: string;
+}
+
+function decodeJwt(token: string): Record<string, string> {
+  const base64Url = token.split(".")[1];
+  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+      .join("")
+  );
+  return JSON.parse(jsonPayload);
+}
+
+// Google Client ID - users should replace with their own from Google Cloud Console
+const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
+  const [googleLoaded, setGoogleLoaded] = useState(false);
 
+  // Load saved user on mount
   useEffect(() => {
     try {
       const u = localStorage.getItem("sfpopos_user");
@@ -106,7 +128,54 @@ export function useAuth() {
     } catch {}
   }, []);
 
-  const login = useCallback((name: string, email: string) => {
+  // Load Google Identity Services script
+  useEffect(() => {
+    if (!GOOGLE_CLIENT_ID) return;
+    if (document.getElementById("google-gsi-script")) {
+      setGoogleLoaded(true);
+      return;
+    }
+    const script = document.createElement("script");
+    script.id = "google-gsi-script";
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => setGoogleLoaded(true);
+    document.head.appendChild(script);
+  }, []);
+
+  const handleGoogleResponse = useCallback((response: GoogleCredentialResponse) => {
+    const payload = decodeJwt(response.credential);
+    const u: User = {
+      id: payload.sub,
+      name: payload.name,
+      email: payload.email,
+      picture: payload.picture,
+    };
+    localStorage.setItem("sfpopos_user", JSON.stringify(u));
+    setUser(u);
+  }, []);
+
+  const loginWithGoogle = useCallback(() => {
+    if (!GOOGLE_CLIENT_ID || !googleLoaded) return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const google = (window as any).google as {
+      accounts: {
+        id: {
+          initialize: (config: Record<string, unknown>) => void;
+          prompt: () => void;
+        };
+      };
+    };
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: handleGoogleResponse,
+    });
+    google.accounts.id.prompt();
+  }, [googleLoaded, handleGoogleResponse]);
+
+  // Fallback login for when Google Client ID isn't configured
+  const loginWithEmail = useCallback((name: string, email: string) => {
     const u: User = { id: crypto.randomUUID(), name, email };
     localStorage.setItem("sfpopos_user", JSON.stringify(u));
     setUser(u);
@@ -117,5 +186,11 @@ export function useAuth() {
     setUser(null);
   }, []);
 
-  return { user, login, logout };
+  return {
+    user,
+    loginWithGoogle,
+    loginWithEmail,
+    logout,
+    googleAvailable: !!GOOGLE_CLIENT_ID && googleLoaded,
+  };
 }

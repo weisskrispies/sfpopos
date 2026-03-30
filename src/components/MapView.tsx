@@ -65,9 +65,15 @@ function MapInner({
 
   const { MapContainer, TileLayer, Marker, Popup, Circle } = RL;
 
-  const center: [number, number] = userLocation
-    ? [userLocation.lat, userLocation.lng]
-    : [37.7900, -122.3990];
+  // Always center on downtown SF. Only show user location marker if they're in the SF area.
+  const SF_CENTER: [number, number] = [37.7900, -122.3990];
+  const isInSFArea =
+    userLocation &&
+    userLocation.lat > 37.7 &&
+    userLocation.lat < 37.82 &&
+    userLocation.lng > -122.45 &&
+    userLocation.lng < -122.38;
+  const center: [number, number] = SF_CENTER;
 
   const createIcon = (popos: POPOS) => {
     const isSaved = saved.has(popos.id);
@@ -126,8 +132,8 @@ function MapInner({
         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
       />
 
-      {/* User location */}
-      {userLocation && (
+      {/* User location - only shown if user is in SF area */}
+      {isInSFArea && userLocation && (
         <>
           <Circle
             center={[userLocation.lat, userLocation.lng]}

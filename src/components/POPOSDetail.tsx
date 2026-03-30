@@ -10,6 +10,7 @@ import {
   Train,
   Navigation,
   Share2,
+  Compass,
 } from "lucide-react";
 import { POPOS } from "@/data/popos";
 import {
@@ -155,6 +156,21 @@ export default function POPOSDetail({
                 ))}
               </div>
             </div>
+
+            {/* How to Find It */}
+            {popos.howToFind && (
+              <div>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--muted)] mb-2">
+                  How to Find It
+                </h3>
+                <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-100 rounded-xl">
+                  <Compass className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm leading-relaxed text-amber-900">
+                    {popos.howToFind}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Info grid */}
             <div className="grid grid-cols-1 gap-3">

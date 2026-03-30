@@ -13,6 +13,7 @@ export interface POPOS {
   images: string[];
   yearOpened?: string;
   transitNearby: string[];
+  howToFind?: string;
 }
 
 export const poposData: POPOS[] = [
@@ -40,13 +41,14 @@ export const poposData: POPOS[] = [
     lat: 37.7935,
     lng: -122.4012,
     type: "Rooftop Terrace",
-    description: "A hidden gem atop a Financial District office building, this rooftop terrace offers panoramic views of the Transamerica Pyramid and surrounding skyline. Lush plantings, comfortable seating, and a peaceful atmosphere make it a perfect escape from the bustling streets below.",
-    features: ["Seating", "Garden", "Skyline Views", "Wi-Fi"],
+    description: "Perhaps the city's most extraordinary POPOS — a south-facing 15th-floor terrace with panoramic views of the Financial District skyline. Vibrant plants, flowers, and trees surround a colorful statue representing the four seasons by artist Joan Brown. One of SF's best-kept secrets.",
+    features: ["Seating", "Garden", "Skyline Views", "Public Art"],
     hours: "Mon-Fri 10:00 AM - 5:00 PM",
     accessibility: "Elevator access available",
     images: ["/images/placeholder.jpg"],
     yearOpened: "1985",
-    transitNearby: ["BART - Montgomery", "Muni - 10, 12"]
+    transitNearby: ["BART - Montgomery", "Muni - 10, 12"],
+    howToFind: "Enter the building at 343 Sansome Street and take the elevator to the 15th floor. The terrace is accessible from the elevator lobby — look for the POPOS signage. You may need to check in at the front desk."
   },
   {
     id: "100-pine-atrium",
@@ -56,13 +58,14 @@ export const poposData: POPOS[] = [
     lat: 37.7926,
     lng: -122.3990,
     type: "Indoor Atrium",
-    description: "An elegant indoor atrium with a soaring glass ceiling that floods the space with natural light. The ground floor features a small cafe, comfortable seating areas, and rotating art exhibitions. A warm refuge on San Francisco's foggy days.",
-    features: ["Seating", "Food & Drink", "Art Gallery", "Indoor", "Restrooms"],
-    hours: "Mon-Fri 7:00 AM - 6:00 PM",
+    description: "A tiny, quaint urban garden quietly tucked away from the surrounding city. Nestled between large buildings with a soothing fountain, seating, and an art installation. A warm refuge on San Francisco's foggy days.",
+    features: ["Seating", "Fountain", "Art", "Indoor", "Quiet Space"],
+    hours: "Daily 10:00 AM - 6:00 PM",
     accessibility: "Fully wheelchair accessible",
     images: ["/images/placeholder.jpg"],
     yearOpened: "1972",
-    transitNearby: ["BART - Embarcadero", "Muni - 1, 38"]
+    transitNearby: ["BART - Embarcadero", "Muni - 1, 38"],
+    howToFind: "Enter through the building lobby at 100 Pine Street, or access via a passageway off Front Street. The garden is at ground level behind the lobby."
   },
   {
     id: "transamerica-redwood-park",
@@ -72,13 +75,14 @@ export const poposData: POPOS[] = [
     lat: 37.7952,
     lng: -122.4028,
     type: "Park",
-    description: "A beloved half-acre park nestled at the base of the iconic Transamerica Pyramid. Mature redwood trees transported from the Santa Cruz Mountains create a tranquil forest atmosphere in the heart of downtown. Features a whimsical fountain with jumping frogs and a memorial to local literary figures.",
+    description: "A beloved half-acre park nestled at the base of the iconic Transamerica Pyramid. Over fifty towering redwood trees transported from the Santa Cruz Mountains create a tranquil forest atmosphere in the heart of downtown. Features a whimsical fountain with jumping frogs and a memorial to local literary figures.",
     features: ["Seating", "Trees", "Fountain", "Public Art", "Literary Walk"],
-    hours: "Open daily, dawn to dusk",
+    hours: "Mon-Fri 7:00 AM - 5:30 PM",
     accessibility: "Fully wheelchair accessible",
     images: ["/images/placeholder.jpg"],
     yearOpened: "1972",
-    transitNearby: ["BART - Montgomery", "Muni - 10, 12, 30, 45"]
+    transitNearby: ["BART - Montgomery", "Muni - 10, 12, 30, 45"],
+    howToFind: "Look for the grove of redwood trees at the base of the Transamerica Pyramid. The park entrance is on the east side of the building, accessible from Montgomery Street between Washington and Clay. Note: may be closed during the Pyramid renovation."
   },
   {
     id: "empire-park",
@@ -88,13 +92,14 @@ export const poposData: POPOS[] = [
     lat: 37.7944,
     lng: -122.4040,
     type: "Park",
-    description: "A charming pocket park tucked behind the old Transamerica building on a historic alley. Brick pathways, vine-covered walls, and ornamental plantings create a Mediterranean courtyard feel. One of the city's most intimate and peaceful POPOS.",
-    features: ["Seating", "Garden", "Historic Architecture"],
-    hours: "Open daily, dawn to dusk",
+    description: "Formerly known as Grabhorn Park, this charming pocket park features a shady pergola, park benches, and a lovely water feature designed by artist Pepo Pilcher. Planted with tree ferns, climbing vines, and wisteria. A plaque commemorates Emperor Norton, San Francisco's beloved self-proclaimed emperor.",
+    features: ["Seating", "Pergola", "Water Feature", "Garden", "Historic Plaque"],
+    hours: "Mon-Fri 7:00 AM - 5:30 PM",
     accessibility: "Step-free access from Commercial St",
     images: ["/images/placeholder.jpg"],
     yearOpened: "1968",
-    transitNearby: ["BART - Montgomery", "Muni - 10, 12"]
+    transitNearby: ["BART - Montgomery", "Muni - 10, 12"],
+    howToFind: "Walk down Commercial Street from Montgomery — the park is on the right side, tucked behind the old Transamerica building. Look for the pergola and vine-covered entrance around the block from Transamerica Redwood Park."
   },
   {
     id: "one-kearny-club",
@@ -120,13 +125,14 @@ export const poposData: POPOS[] = [
     lat: 37.7890,
     lng: -122.4030,
     type: "Rooftop Garden",
-    description: "Perched above a glass-vaulted European-style shopping galleria, this rooftop garden is a true urban oasis. Manicured lawns, flowering borders, and park benches offer a peaceful retreat with views of surrounding high-rises. Hosts a popular farmers market on Thursdays.",
-    features: ["Seating", "Garden", "Lawn", "Farmers Market", "Views"],
+    description: "Perched above a glass-vaulted European-style shopping galleria, this sky-high garden blooms with flowers, trees, and shrubbery. Park benches and a fountain offer a peaceful retreat with spectacular views of surrounding high-rises. Home to designer boutiques and dining below.",
+    features: ["Seating", "Garden", "Lawn", "Fountain", "Views"],
     hours: "Mon-Sat 10:00 AM - 6:00 PM",
     accessibility: "Elevator access from galleria",
     images: ["/images/placeholder.jpg"],
     yearOpened: "1983",
-    transitNearby: ["BART - Montgomery", "Muni - 2, 3, 38"]
+    transitNearby: ["BART - Montgomery", "Muni - 2, 3, 38"],
+    howToFind: "Enter the Crocker Galleria at 50 Post Street (between Montgomery and Kearny). Take the escalators or elevator to the top floor, then follow signs to the rooftop terrace. The rooftop exit is in the northwest corner of the Galleria."
   },
   {
     id: "555-mission-plaza",
@@ -158,7 +164,8 @@ export const poposData: POPOS[] = [
     accessibility: "Fully wheelchair accessible, gondola and elevator access",
     images: ["/images/placeholder.jpg"],
     yearOpened: "2018",
-    transitNearby: ["Salesforce Transit Center", "BART - Montgomery", "Muni - Multiple lines"]
+    transitNearby: ["Salesforce Transit Center", "BART - Montgomery", "Muni - Multiple lines"],
+    howToFind: "Access Salesforce Park via the gondola at Fremont and Mission streets, or take elevators inside the Salesforce Transit Center (at 1st and Mission or Fremont and Natoma). The park is on the rooftop level — you can't miss the greenery from below."
   },
   {
     id: "yerba-buena-gardens",
@@ -226,19 +233,20 @@ export const poposData: POPOS[] = [
   },
   {
     id: "101-second-street-atrium",
-    name: "101 Second Street Atrium",
+    name: "101 Second Street Greenhouse",
     address: "101 Second St",
     neighborhood: "SoMa",
     lat: 37.7878,
     lng: -122.3990,
-    type: "Indoor Atrium",
-    description: "A light-filled indoor atrium with towering ceilings and an open, airy feel. The space serves as both a public passage and a gathering place, with tables, chairs, and a small cafe. Floor-to-ceiling windows bring in natural light while art installations add visual interest.",
-    features: ["Seating", "Food & Drink", "Indoor", "Art", "Wi-Fi"],
+    type: "Greenhouse",
+    description: "An expansive five-story greenhouse with two glass fronts that open to Second and Mission Streets. Visitors are greeted with indoor table seating and bench seating at the foot of several trees housed near high windows. Upstairs features more seating, a balcony overlooking the interior, and a bird's-eye view of artwork.",
+    features: ["Seating", "Indoor", "Trees", "Art", "Multi-Level"],
     hours: "Mon-Fri 7:00 AM - 7:00 PM",
     accessibility: "Fully wheelchair accessible",
     images: ["/images/placeholder.jpg"],
     yearOpened: "2000",
-    transitNearby: ["BART - Montgomery", "Muni - 10, 14"]
+    transitNearby: ["BART - Montgomery", "Muni - 10, 14"],
+    howToFind: "Enter at 101 Second Street — the greenhouse is visible through the large glass facade from both Second and Mission Streets. Walk in through the main entrance; the public space is to the left of the lobby with multiple levels accessible by stairs."
   },
   {
     id: "222-sansome-terrace",

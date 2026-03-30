@@ -27,7 +27,7 @@ export default function Home() {
 
   const { saved, visited, toggleSaved, toggleVisited } = useSavedPopos();
   const { location } = useUserLocation();
-  const { user, login, logout } = useAuth();
+  const { user, loginWithGoogle, loginWithEmail, logout, googleAvailable } = useAuth();
   const search = useSearch();
 
   const handleToggleSaved = (id: string) => {
@@ -156,7 +156,12 @@ export default function Home() {
 
       {/* Login modal */}
       {showLogin && (
-        <LoginModal onLogin={login} onClose={() => setShowLogin(false)} />
+        <LoginModal
+          onLoginWithGoogle={loginWithGoogle}
+          onLoginWithEmail={loginWithEmail}
+          googleAvailable={googleAvailable}
+          onClose={() => setShowLogin(false)}
+        />
       )}
     </div>
   );

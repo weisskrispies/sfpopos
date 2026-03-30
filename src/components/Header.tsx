@@ -60,9 +60,18 @@ export default function Header({
           <div className="flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-[var(--secondary)] rounded-full flex items-center justify-center text-white text-sm font-medium">
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
+                {user.picture ? (
+                  <img
+                    src={user.picture}
+                    alt={user.name}
+                    className="w-8 h-8 rounded-full"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <div className="w-8 h-8 bg-[var(--secondary)] rounded-full flex items-center justify-center text-white text-sm font-medium">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
                 <span className="text-sm font-medium hidden sm:block">
                   {user.name}
                 </span>
