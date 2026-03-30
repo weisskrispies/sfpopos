@@ -103,6 +103,12 @@ export function getTypeEmoji(type: string): string {
     "Community Garden": "🥕",
     "Urban Farm": "🌱",
     "Elevated Plaza": "🏙️",
+    "Conservatory": "🏛️",
+    "Urban Garden": "🌿",
+    "Pedestrian Walkway": "🚶",
+    "Snippet": "📐",
+    "Indoor Park": "🌳",
+    "Greenhouse": "🌿",
   };
   return map[type] || "📍";
 }

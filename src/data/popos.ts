@@ -13,6 +13,7 @@ export interface POPOS {
   images: string[];
   yearOpened?: string;
   transitNearby: string[];
+  howToFind?: string;
 }
 
 export const poposData: POPOS[] = [

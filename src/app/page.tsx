@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { poposData, POPOS } from "@/data/popos";
+import { POPOS } from "@/data/popos";
 import { useSavedPopos, useUserLocation, useSearch, useAuth } from "@/lib/hooks";
+import { useAdminEdits, getMergedData, isAdmin } from "@/lib/admin";
 import { filterPopos } from "@/lib/utils";
 import Header from "@/components/Header";
 import SearchBar from "@/components/SearchBar";
 import POPOSCard from "@/components/POPOSCard";
 import POPOSDetail from "@/components/POPOSDetail";
 import LoginModal from "@/components/LoginModal";
+import AdminEditModal from "@/components/AdminEditModal";
 import dynamic from "next/dynamic";
 
 const MapView = dynamic(() => import("@/components/MapView"), {
@@ -23,12 +25,14 @@ const MapView = dynamic(() => import("@/components/MapView"), {
 export default function Home() {
   const [activeView, setActiveView] = useState<"list" | "map">("list");
   const [selectedPopos, setSelectedPopos] = useState<POPOS | null>(null);
+  const [editingPopos, setEditingPopos] = useState<POPOS | null>(null);
   const [showLogin, setShowLogin] = useState(false);
 
   const { saved, visited, toggleSaved, toggleVisited } = useSavedPopos();
   const { location } = useUserLocation();
-  const { user, login, logout } = useAuth();
+  const { user, loginWithGoogle, loginWithEmail, logout, googleAvailable } = useAuth();
   const search = useSearch();
+  const { edits, updatePopos, exportFullData, editCount } = useAdminEdits();
 
   const handleToggleSaved = (id: string) => {
     if (!user) {
@@ -46,10 +50,12 @@ export default function Home() {
     toggleVisited(id);
   };
 
+  const mergedData = useMemo(() => getMergedData(edits), [edits]);
+
   const filteredSpaces = useMemo(
     () =>
       filterPopos(
-        poposData,
+        mergedData,
         search.query,
         search.selectedType,
         search.selectedNeighborhood,
@@ -59,6 +65,7 @@ export default function Home() {
         search.showVisitedOnly
       ),
     [
+      mergedData,
       search.query,
       search.selectedType,
       search.selectedNeighborhood,
@@ -66,6 +73,7 @@ export default function Home() {
       visited,
       search.showSavedOnly,
       search.showVisitedOnly,
+      edits,
     ]
   );
 
@@ -77,6 +85,9 @@ export default function Home() {
         onLogout={logout}
         activeView={activeView}
         onViewChange={setActiveView}
+        isAdmin={isAdmin(user?.email)}
+        onExportData={exportFullData}
+        editCount={editCount}
       />
 
       {activeView === "list" ? (
@@ -144,19 +155,38 @@ export default function Home() {
       {/* Detail modal */}
       {selectedPopos && (
         <POPOSDetail
-          popos={selectedPopos}
+          popos={mergedData.find((p) => p.id === selectedPopos.id) || selectedPopos}
           isSaved={saved.has(selectedPopos.id)}
           isVisited={visited.has(selectedPopos.id)}
           onToggleSaved={() => handleToggleSaved(selectedPopos.id)}
           onToggleVisited={() => handleToggleVisited(selectedPopos.id)}
           onClose={() => setSelectedPopos(null)}
           userLocation={location}
+          isAdmin={isAdmin(user?.email)}
+          onEdit={() => setEditingPopos(mergedData.find((p) => p.id === selectedPopos.id) || selectedPopos)}
+        />
+      )}
+
+      {/* Admin edit modal */}
+      {editingPopos && (
+        <AdminEditModal
+          popos={editingPopos}
+          onSave={(updates) => {
+            updatePopos(editingPopos.id, updates);
+            setEditingPopos(null);
+          }}
+          onClose={() => setEditingPopos(null)}
         />
       )}
 
       {/* Login modal */}
       {showLogin && (
-        <LoginModal onLogin={login} onClose={() => setShowLogin(false)} />
+        <LoginModal
+          onLoginWithGoogle={loginWithGoogle}
+          onLoginWithEmail={loginWithEmail}
+          googleAvailable={googleAvailable}
+          onClose={() => setShowLogin(false)}
+        />
       )}
     </div>
   );

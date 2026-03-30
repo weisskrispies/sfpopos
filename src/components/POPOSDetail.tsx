@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   X,
   Heart,
@@ -10,6 +11,10 @@ import {
   Train,
   Navigation,
   Share2,
+  Compass,
+  ChevronLeft,
+  ChevronRight,
+  Pencil,
 } from "lucide-react";
 import { POPOS } from "@/data/popos";
 import {
@@ -27,6 +32,8 @@ interface POPOSDetailProps {
   onToggleVisited: () => void;
   onClose: () => void;
   userLocation?: { lat: number; lng: number } | null;
+  onEdit?: () => void;
+  isAdmin?: boolean;
 }
 
 export default function POPOSDetail({
@@ -37,9 +44,40 @@ export default function POPOSDetail({
   onToggleVisited,
   onClose,
   userLocation,
+  onEdit,
+  isAdmin,
 }: POPOSDetailProps) {
   const gradient = getPlaceholderGradient(popos.id);
   const emoji = getTypeEmoji(popos.type);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  const realImages = popos.images.filter((img) => img && !img.includes("placeholder"));
+  const hasMultipleImages = realImages.length >= 2;
+
+  const handlePrevImage = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? realImages.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = () => {
+    setCurrentImageIndex((prev) => (prev === realImages.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) handleNextImage();
+      else handlePrevImage();
+    }
+    setTouchStartX(null);
+  };
+
   const distance = userLocation
     ? getDistance(userLocation.lat, userLocation.lng, popos.lat, popos.lng)
     : null;
@@ -64,13 +102,69 @@ export default function POPOSDetail({
           <X className="w-5 h-5" />
         </button>
 
+        {/* Admin edit button */}
+        {isAdmin && onEdit && (
+          <button
+            onClick={onEdit}
+            className="absolute top-4 left-4 z-10 p-2 bg-white/90 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-sm"
+          >
+            <Pencil className="w-4 h-4" />
+          </button>
+        )}
+
         {/* Scrollable content */}
         <div className="overflow-y-auto max-h-[90vh]">
-          {/* Hero */}
+          {/* Hero with image carousel */}
           <div
             className={`relative w-full aspect-[16/9] ${gradient} flex items-center justify-center`}
+            onTouchStart={hasMultipleImages ? handleTouchStart : undefined}
+            onTouchEnd={hasMultipleImages ? handleTouchEnd : undefined}
           >
-            <span className="text-7xl opacity-80">{emoji}</span>
+            {realImages.length > 0 ? (
+              <img
+                src={realImages[currentImageIndex]}
+                alt={`${popos.name} - image ${currentImageIndex + 1}`}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              <span className="text-7xl opacity-80">{emoji}</span>
+            )}
+
+            {/* Carousel left/right arrows */}
+            {hasMultipleImages && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-sm"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-10 p-1.5 bg-white/80 backdrop-blur-sm rounded-full hover:bg-white transition-colors shadow-sm"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </>
+            )}
+
+            {/* Dot indicators */}
+            {hasMultipleImages && (
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex gap-1.5">
+                {realImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      idx === currentImageIndex
+                        ? "bg-white scale-125"
+                        : "bg-white/50 hover:bg-white/75"
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
+
             <div className="absolute bottom-4 left-4">
               <span className="px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium">
                 {popos.type}
@@ -155,6 +249,21 @@ export default function POPOSDetail({
                 ))}
               </div>
             </div>
+
+            {/* How to Find It */}
+            {popos.howToFind && (
+              <div>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--muted)] mb-2">
+                  How to Find It
+                </h3>
+                <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-100 rounded-xl">
+                  <Compass className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-sm leading-relaxed text-amber-900">
+                    {popos.howToFind}
+                  </p>
+                </div>
+              </div>
+            )}
 
             {/* Info grid */}
             <div className="grid grid-cols-1 gap-3">
