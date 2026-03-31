@@ -23,6 +23,9 @@ import {
   formatDistance,
   getDistance,
 } from "@/lib/utils";
+import dynamic from "next/dynamic";
+
+const DetailMap = dynamic(() => import("./DetailMap"), { ssr: false });
 
 interface POPOSDetailProps {
   popos: POPOS;
@@ -308,6 +311,9 @@ export default function POPOSDetail({
                 </div>
               </div>
             </div>
+
+            {/* Mini map */}
+            <DetailMap lat={popos.lat} lng={popos.lng} name={popos.name} />
 
             {/* Directions */}
             <div className="flex gap-2">
