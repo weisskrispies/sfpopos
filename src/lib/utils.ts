@@ -8,7 +8,8 @@ export function filterPopos(
   saved: Set<string>,
   visited: Set<string>,
   showSavedOnly: boolean,
-  showVisitedOnly: boolean
+  showVisitedOnly: boolean,
+  showNotVisitedOnly: boolean
 ): POPOS[] {
   let filtered = data;
 
@@ -20,7 +21,6 @@ export function filterPopos(
         p.address.toLowerCase().includes(q) ||
         p.neighborhood.toLowerCase().includes(q) ||
         p.type.toLowerCase().includes(q) ||
-        p.description.toLowerCase().includes(q) ||
         p.features.some((f) => f.toLowerCase().includes(q))
     );
   }
@@ -41,7 +41,31 @@ export function filterPopos(
     filtered = filtered.filter((p) => visited.has(p.id));
   }
 
+  if (showNotVisitedOnly) {
+    filtered = filtered.filter((p) => !visited.has(p.id));
+  }
+
   return filtered;
+}
+
+export type SortMode = "alpha" | "nearest";
+
+export function sortPopos(
+  data: POPOS[],
+  mode: SortMode,
+  userLocation: { lat: number; lng: number } | null
+): POPOS[] {
+  const sorted = [...data];
+  if (mode === "nearest" && userLocation) {
+    sorted.sort(
+      (a, b) =>
+        getDistance(userLocation.lat, userLocation.lng, a.lat, a.lng) -
+        getDistance(userLocation.lat, userLocation.lng, b.lat, b.lng)
+    );
+  } else {
+    sorted.sort((a, b) => a.name.localeCompare(b.name));
+  }
+  return sorted;
 }
 
 export function getDistance(
@@ -88,27 +112,13 @@ export function getPlaceholderGradient(id: string): string {
 export function getTypeEmoji(type: string): string {
   const map: Record<string, string> = {
     "Plaza": "🏛️",
-    "Rooftop Terrace": "🌇",
-    "Rooftop Garden": "🌿",
-    "Indoor Atrium": "✨",
+    "Rooftop": "🌇",
+    "Indoor Space": "✨",
     "Park": "🌳",
-    "Garden": "🌺",
-    "Elevated Park": "⛅",
-    "Waterfront Park": "🌊",
-    "Sun Terrace": "☀️",
-    "Terrace": "🌤️",
-    "Promenade": "🚶",
-    "Steps & Seating": "📐",
-    "Courtyard": "🏰",
-    "Community Garden": "🥕",
-    "Urban Farm": "🌱",
-    "Elevated Plaza": "🏙️",
-    "Conservatory": "🏛️",
-    "Urban Garden": "🌿",
-    "Pedestrian Walkway": "🚶",
+    "Garden": "🌿",
+    "Terrace": "☀️",
+    "Walkway": "🚶",
     "Snippet": "📐",
-    "Indoor Park": "🌳",
-    "Greenhouse": "🌿",
   };
   return map[type] || "📍";
 }

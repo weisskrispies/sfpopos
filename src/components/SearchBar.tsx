@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, SlidersHorizontal, X, Heart, CheckCircle } from "lucide-react";
+import { Search, SlidersHorizontal, X, Heart, CheckCircle, EyeOff, ArrowDownAZ, MapPin } from "lucide-react";
 import { neighborhoods, types } from "@/data/popos";
 import { useState } from "react";
 
@@ -15,6 +15,11 @@ interface SearchBarProps {
   onShowSavedOnly: (v: boolean) => void;
   showVisitedOnly: boolean;
   onShowVisitedOnly: (v: boolean) => void;
+  showNotVisitedOnly: boolean;
+  onShowNotVisitedOnly: (v: boolean) => void;
+  sortMode: "alpha" | "nearest";
+  onSortModeChange: (m: "alpha" | "nearest") => void;
+  hasLocation: boolean;
   resultCount: number;
 }
 
@@ -29,15 +34,20 @@ export default function SearchBar({
   onShowSavedOnly,
   showVisitedOnly,
   onShowVisitedOnly,
+  showNotVisitedOnly,
+  onShowNotVisitedOnly,
+  sortMode,
+  onSortModeChange,
+  hasLocation,
   resultCount,
 }: SearchBarProps) {
   const [showFilters, setShowFilters] = useState(false);
-  const hasFilters = selectedType || selectedNeighborhood || showSavedOnly || showVisitedOnly;
+  const hasFilters = selectedType || selectedNeighborhood || showSavedOnly || showVisitedOnly || showNotVisitedOnly;
 
   return (
     <div className="bg-white border-b border-[var(--border)] sticky top-16 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3">
-        {/* Search Input */}
+        {/* Search + Filter + Sort row */}
         <div className="flex gap-2">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted)]" />
@@ -45,7 +55,7 @@ export default function SearchBar({
               type="text"
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
-              placeholder="Search spaces, neighborhoods, features..."
+              placeholder="Search by name, address, or feature..."
               className="w-full pl-10 pr-10 py-2.5 bg-gray-50 border border-[var(--border)] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent transition-all"
             />
             {query && (
@@ -57,6 +67,24 @@ export default function SearchBar({
               </button>
             )}
           </div>
+          {/* Sort toggle */}
+          <button
+            onClick={() => onSortModeChange(sortMode === "alpha" ? "nearest" : "alpha")}
+            className={`flex items-center gap-1.5 px-3 py-2.5 border rounded-full text-sm font-medium transition-all ${
+              sortMode === "nearest"
+                ? "border-[var(--secondary)] text-[var(--secondary)] bg-green-50"
+                : "border-[var(--border)] hover:border-gray-400"
+            }`}
+            title={sortMode === "alpha" ? "Sort A–Z" : "Sort by nearest"}
+          >
+            {sortMode === "nearest" ? (
+              <MapPin className="w-4 h-4" />
+            ) : (
+              <ArrowDownAZ className="w-4 h-4" />
+            )}
+            <span className="hidden sm:inline">{sortMode === "nearest" ? "Nearest" : "A–Z"}</span>
+          </button>
+          {/* Filters toggle */}
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 px-4 py-2.5 border rounded-full text-sm font-medium transition-all ${
@@ -122,12 +150,12 @@ export default function SearchBar({
               </div>
             </div>
 
-            {/* Saved / Visited toggles */}
-            <div className="flex gap-2">
+            {/* Saved / Visited / Not Visited toggles */}
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={() => {
                   onShowSavedOnly(!showSavedOnly);
-                  if (!showSavedOnly) onShowVisitedOnly(false);
+                  if (!showSavedOnly) { onShowVisitedOnly(false); onShowNotVisitedOnly(false); }
                 }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                   showSavedOnly
@@ -141,7 +169,7 @@ export default function SearchBar({
               <button
                 onClick={() => {
                   onShowVisitedOnly(!showVisitedOnly);
-                  if (!showVisitedOnly) onShowSavedOnly(false);
+                  if (!showVisitedOnly) { onShowSavedOnly(false); onShowNotVisitedOnly(false); }
                 }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                   showVisitedOnly
@@ -151,6 +179,20 @@ export default function SearchBar({
               >
                 <CheckCircle className="w-3 h-3" />
                 Visited
+              </button>
+              <button
+                onClick={() => {
+                  onShowNotVisitedOnly(!showNotVisitedOnly);
+                  if (!showNotVisitedOnly) { onShowSavedOnly(false); onShowVisitedOnly(false); }
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
+                  showNotVisitedOnly
+                    ? "bg-amber-500 text-white border-amber-500"
+                    : "border-[var(--border)] hover:border-gray-400 text-[var(--muted)]"
+                }`}
+              >
+                <EyeOff className="w-3 h-3" />
+                Not Visited
               </button>
             </div>
           </div>

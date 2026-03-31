@@ -70,6 +70,8 @@ export function useSearch() {
   const [selectedNeighborhood, setSelectedNeighborhood] = useState<string | null>(null);
   const [showSavedOnly, setShowSavedOnly] = useState(false);
   const [showVisitedOnly, setShowVisitedOnly] = useState(false);
+  const [showNotVisitedOnly, setShowNotVisitedOnly] = useState(false);
+  const [sortMode, setSortMode] = useState<"alpha" | "nearest">("alpha");
 
   const reset = useCallback(() => {
     setQuery("");
@@ -77,6 +79,7 @@ export function useSearch() {
     setSelectedNeighborhood(null);
     setShowSavedOnly(false);
     setShowVisitedOnly(false);
+    setShowNotVisitedOnly(false);
   }, []);
 
   return {
@@ -85,6 +88,8 @@ export function useSearch() {
     selectedNeighborhood, setSelectedNeighborhood,
     showSavedOnly, setShowSavedOnly,
     showVisitedOnly, setShowVisitedOnly,
+    showNotVisitedOnly, setShowNotVisitedOnly,
+    sortMode, setSortMode,
     reset,
   };
 }

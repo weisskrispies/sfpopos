@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { POPOS } from "@/data/popos";
 import { useSavedPopos, useUserLocation, useSearch, useAuth } from "@/lib/hooks";
 import { useAdminEdits, getMergedData, isAdmin } from "@/lib/admin";
-import { filterPopos } from "@/lib/utils";
+import { filterPopos, sortPopos } from "@/lib/utils";
 import Header from "@/components/Header";
 import SearchBar from "@/components/SearchBar";
 import POPOSCard from "@/components/POPOSCard";
@@ -52,19 +52,8 @@ export default function Home() {
 
   const mergedData = useMemo(() => getMergedData(edits), [edits]);
 
-  const filteredSpaces = useMemo(
-    () =>
-      filterPopos(
-        mergedData,
-        search.query,
-        search.selectedType,
-        search.selectedNeighborhood,
-        saved,
-        visited,
-        search.showSavedOnly,
-        search.showVisitedOnly
-      ),
-    [
+  const filteredSpaces = useMemo(() => {
+    const filtered = filterPopos(
       mergedData,
       search.query,
       search.selectedType,
@@ -73,9 +62,23 @@ export default function Home() {
       visited,
       search.showSavedOnly,
       search.showVisitedOnly,
-      edits,
-    ]
-  );
+      search.showNotVisitedOnly
+    );
+    return sortPopos(filtered, search.sortMode, location);
+  }, [
+    mergedData,
+    search.query,
+    search.selectedType,
+    search.selectedNeighborhood,
+    saved,
+    visited,
+    search.showSavedOnly,
+    search.showVisitedOnly,
+    search.showNotVisitedOnly,
+    search.sortMode,
+    location,
+    edits,
+  ]);
 
   return (
     <div className="h-full flex flex-col">
@@ -103,6 +106,11 @@ export default function Home() {
             onShowSavedOnly={search.setShowSavedOnly}
             showVisitedOnly={search.showVisitedOnly}
             onShowVisitedOnly={search.setShowVisitedOnly}
+            showNotVisitedOnly={search.showNotVisitedOnly}
+            onShowNotVisitedOnly={search.setShowNotVisitedOnly}
+            sortMode={search.sortMode}
+            onSortModeChange={search.setSortMode}
+            hasLocation={!!location}
             resultCount={filteredSpaces.length}
           />
           <main className="flex-1 overflow-y-auto">
