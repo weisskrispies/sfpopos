@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { POPOS } from "@/data/popos";
 import { useSavedPopos, useUserLocation, useSearch, useAuth } from "@/lib/hooks";
 import { useAdminEdits, getMergedData, isAdmin } from "@/lib/admin";
@@ -30,10 +30,15 @@ export default function Home() {
   const [showLogin, setShowLogin] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
 
-  const { saved, visited, toggleSaved, toggleVisited } = useSavedPopos();
+  const { saved, visited, toggleSaved, toggleVisited, setUid } = useSavedPopos();
   const { location } = useUserLocation();
   const { user, loginWithGoogle, loginWithEmail, logout, googleAvailable } =
     useAuth();
+
+  // Sync user ID to saved/visited hook for Firestore
+  useEffect(() => {
+    setUid(user?.id || null);
+  }, [user?.id, setUid]);
   const search = useSearch();
   const {
     edits,
