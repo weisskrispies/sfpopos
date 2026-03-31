@@ -217,7 +217,7 @@ export default function POPOSDetail({
               >
                 <CheckCircle
                   className="w-4 h-4"
-                  fill={isVisited ? "currentColor" : "none"}
+                  fill="none"
                 />
                 {isVisited ? "Visited" : "Mark Visited"}
               </button>

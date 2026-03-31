@@ -82,10 +82,7 @@ export default function POPOSCard({
             }`}
             title={isVisited ? "Mark as not visited" : "Mark as visited"}
           >
-            <CheckCircle
-              className="w-4 h-4"
-              fill={isVisited ? "currentColor" : "none"}
-            />
+            <CheckCircle className="w-4 h-4" />
           </button>
         </div>
 
