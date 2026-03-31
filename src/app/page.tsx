@@ -67,6 +67,10 @@ export default function Home() {
     [edits, added, deleted]
   );
 
+  // Serialize Sets so useMemo deps detect changes reliably
+  const savedKey = [...saved].sort().join(",");
+  const visitedKey = [...visited].sort().join(",");
+
   const filteredSpaces = useMemo(() => {
     const filtered = filterPopos(
       mergedData,
@@ -80,13 +84,14 @@ export default function Home() {
       search.showNotVisitedOnly
     );
     return sortPopos(filtered, search.sortMode, location);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     mergedData,
     search.query,
     search.selectedType,
     search.selectedNeighborhood,
-    saved,
-    visited,
+    savedKey,
+    visitedKey,
     search.showSavedOnly,
     search.showVisitedOnly,
     search.showNotVisitedOnly,

@@ -69,9 +69,20 @@ export default function SearchBar({
           </div>
           {/* Sort toggle */}
           <button
-            onClick={() => onSortModeChange(sortMode === "alpha" ? "nearest" : "alpha")}
+            onClick={() => {
+              if (sortMode === "alpha" && !hasLocation) {
+                // Request location permission
+                navigator.geolocation?.getCurrentPosition(
+                  () => onSortModeChange("nearest"),
+                  () => alert("Enable location access to sort by nearest."),
+                  { enableHighAccuracy: true }
+                );
+              } else {
+                onSortModeChange(sortMode === "alpha" ? "nearest" : "alpha");
+              }
+            }}
             className={`flex items-center gap-1.5 px-3 py-2.5 border rounded-full text-sm font-medium transition-all ${
-              sortMode === "nearest"
+              sortMode === "nearest" && hasLocation
                 ? "border-[var(--secondary)] text-[var(--secondary)] bg-green-50"
                 : "border-[var(--border)] hover:border-gray-400"
             }`}
