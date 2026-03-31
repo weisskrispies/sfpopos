@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+// Firebase Auth + Firestore enabled
 
 export const viewport: Viewport = {
   width: "device-width",
