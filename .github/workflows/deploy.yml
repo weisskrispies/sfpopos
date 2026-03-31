@@ -27,6 +27,7 @@ jobs:
       - run: npm run build
         env:
           NODE_ENV: production
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.SF_POPOS_GOOGLE_OAUTH }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
