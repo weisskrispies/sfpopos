@@ -42,12 +42,58 @@ export function useSavedPopos() {
         const snap = await getDoc(doc(fdb, "users", uid));
         if (snap.exists()) {
           const data = snap.data();
-          if (data.saved) setSaved(new Set(data.saved));
-          if (data.visited) setVisited(new Set(data.visited));
+          const remoteSaved = new Set<string>(data.saved || []);
+          const remoteVisited = new Set<string>(data.visited || []);
+          // Merge any localStorage data that isn't in Firestore yet
+          let localSaved: string[] = [];
+          let localVisited: string[] = [];
+          try {
+            const s = localStorage.getItem("sfpopos_saved");
+            const v = localStorage.getItem("sfpopos_visited");
+            if (s) localSaved = JSON.parse(s);
+            if (v) localVisited = JSON.parse(v);
+          } catch {}
+          let needsSync = false;
+          for (const id of localSaved) {
+            if (!remoteSaved.has(id)) { remoteSaved.add(id); needsSync = true; }
+          }
+          for (const id of localVisited) {
+            if (!remoteVisited.has(id)) { remoteVisited.add(id); needsSync = true; }
+          }
+          setSaved(remoteSaved);
+          setVisited(remoteVisited);
+          // Push merged data back to Firestore if local had extra items
+          if (needsSync) {
+            setDoc(
+              doc(fdb, "users", uid),
+              { saved: [...remoteSaved], visited: [...remoteVisited] },
+              { merge: true }
+            ).catch(console.error);
+          }
+        } else {
+          // No Firestore data yet — upload localStorage data
+          let localSaved: string[] = [];
+          let localVisited: string[] = [];
+          try {
+            const s = localStorage.getItem("sfpopos_saved");
+            const v = localStorage.getItem("sfpopos_visited");
+            if (s) localSaved = JSON.parse(s);
+            if (v) localVisited = JSON.parse(v);
+          } catch {}
+          const newSaved = new Set(localSaved);
+          const newVisited = new Set(localVisited);
+          setSaved(newSaved);
+          setVisited(newVisited);
+          if (localSaved.length > 0 || localVisited.length > 0) {
+            setDoc(
+              doc(fdb, "users", uid),
+              { saved: localSaved, visited: localVisited },
+              { merge: true }
+            ).catch(console.error);
+          }
         }
       } catch (e) {
         console.error("Error loading user data:", e);
-        // Fall back to localStorage
         try {
           const s = localStorage.getItem("sfpopos_saved");
           const v = localStorage.getItem("sfpopos_visited");
