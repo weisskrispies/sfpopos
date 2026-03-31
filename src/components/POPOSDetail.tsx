@@ -51,6 +51,7 @@ export default function POPOSDetail({
   const emoji = getTypeEmoji(popos.type);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [imgError, setImgError] = useState(false);
 
   const realImages = popos.images.filter((img) => img && !img.includes("placeholder"));
   const hasMultipleImages = realImages.length >= 2;
@@ -93,7 +94,7 @@ export default function POPOSDetail({
       />
 
       {/* Panel */}
-      <div className="relative w-full sm:max-w-lg max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl overflow-hidden animate-slide-up sm:animate-fade-in">
+      <div className="relative w-full sm:max-w-lg max-h-[100dvh] sm:max-h-[90vh] bg-white rounded-t-2xl sm:rounded-2xl overflow-hidden animate-slide-up sm:animate-fade-in pt-[env(safe-area-inset-top)] sm:pt-0">
         {/* Close button */}
         <button
           onClick={onClose}
@@ -113,18 +114,19 @@ export default function POPOSDetail({
         )}
 
         {/* Scrollable content */}
-        <div className="overflow-y-auto max-h-[90vh]">
+        <div className="overflow-y-auto max-h-[100dvh] sm:max-h-[90vh]">
           {/* Hero with image carousel */}
           <div
             className={`relative w-full aspect-[16/9] ${gradient} flex items-center justify-center`}
             onTouchStart={hasMultipleImages ? handleTouchStart : undefined}
             onTouchEnd={hasMultipleImages ? handleTouchEnd : undefined}
           >
-            {realImages.length > 0 ? (
+            {realImages.length > 0 && !imgError ? (
               <img
                 src={realImages[currentImageIndex]}
                 alt={`${popos.name} - image ${currentImageIndex + 1}`}
                 className="absolute inset-0 w-full h-full object-cover"
+                onError={() => setImgError(true)}
               />
             ) : (
               <span className="text-7xl opacity-80">{emoji}</span>

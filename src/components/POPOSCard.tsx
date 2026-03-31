@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Heart, CheckCircle, Clock, MapPin } from "lucide-react";
 import { POPOS } from "@/data/popos";
 import { getPlaceholderGradient, getTypeEmoji, formatDistance, getDistance } from "@/lib/utils";
@@ -23,6 +24,7 @@ export default function POPOSCard({
   onClick,
   userLocation,
 }: POPOSCardProps) {
+  const [imgError, setImgError] = useState(false);
   const gradient = getPlaceholderGradient(popos.id);
   const emoji = getTypeEmoji(popos.type);
   const distance = userLocation
@@ -36,12 +38,13 @@ export default function POPOSCard({
     >
       {/* Image */}
       <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-3">
-        {popos.images[0] && !popos.images[0].includes("placeholder") ? (
+        {popos.images[0] && !popos.images[0].includes("placeholder") && !imgError ? (
           <img
             src={popos.images[0]}
             alt={popos.name}
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
+            onError={() => setImgError(true)}
           />
         ) : (
           <div
