@@ -66,7 +66,7 @@ export default function POPOSCard({
                 ? "bg-[var(--primary)] text-white"
                 : "bg-white/80 text-[var(--foreground)] hover:bg-white"
             }`}
-            title={isSaved ? "Remove from saved" : "Save"}
+            title={isSaved ? "Remove from favorites" : "Favorite"}
           >
             <Heart
               className="w-4 h-4"

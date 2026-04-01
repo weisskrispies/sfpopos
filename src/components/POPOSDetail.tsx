@@ -210,7 +210,7 @@ export default function POPOSDetail({
                   className="w-4 h-4"
                   fill={isSaved ? "currentColor" : "none"}
                 />
-                {isSaved ? "Saved" : "Save"}
+                {isSaved ? "Favorited" : "Favorite"}
               </button>
               <button
                 onClick={onToggleVisited}

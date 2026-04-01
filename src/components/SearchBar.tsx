@@ -100,7 +100,7 @@ export default function SearchBar({
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 px-4 py-2.5 border rounded-full text-sm font-medium transition-all ${
               hasFilters
-                ? "border-[var(--primary)] text-[var(--primary)] bg-red-50"
+                ? "border-[var(--primary)] text-[var(--primary)] bg-green-50"
                 : "border-[var(--border)] hover:border-gray-400"
             }`}
           >
@@ -175,7 +175,7 @@ export default function SearchBar({
                 }`}
               >
                 <Heart className="w-3 h-3" />
-                Saved
+                Favorites
               </button>
               <button
                 onClick={() => {

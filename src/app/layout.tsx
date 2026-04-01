@@ -29,6 +29,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
+      <head>
+        <link rel="icon" href="/sfpopos/favicon.ico" sizes="any" />
+        <link rel="icon" href="/sfpopos/logo.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/sfpopos/apple-touch-icon.png" />
+        <link rel="manifest" href="/sfpopos/manifest.json" />
+        <meta name="theme-color" content="#4A7C10" />
+      </head>
       <body className="h-full flex flex-col">{children}</body>
     </html>
   );

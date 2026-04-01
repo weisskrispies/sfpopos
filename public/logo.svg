@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#ffffff"/>
+  <!-- Left tree -->
+  <polygon points="140,420 60,420 140,140" fill="#3D6B0F"/>
+  <polygon points="140,420 220,420 140,140" fill="#4A7C10"/>
+  <!-- Right tree -->
+  <polygon points="372,420 292,420 372,140" fill="#3D6B0F"/>
+  <polygon points="372,420 452,420 372,140" fill="#4A7C10"/>
+  <!-- Transamerica Pyramid (center, behind trees) -->
+  <polygon points="256,80 218,420 256,420" fill="#E0E0E0"/>
+  <polygon points="256,80 294,420 256,420" fill="#6B6B6B"/>
+</svg>

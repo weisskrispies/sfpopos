@@ -102,9 +102,7 @@ export default function Header({
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[var(--primary)] rounded-lg flex items-center justify-center">
-              <MapPin className="w-5 h-5 text-white" />
-            </div>
+            <img src="/sfpopos/logo.svg" alt="SF POPOS" className="w-8 h-8 rounded-lg" />
             <span className="text-lg font-bold tracking-tight">
               SF <span className="text-[var(--primary)]">POPOS</span>
             </span>
@@ -112,7 +110,7 @@ export default function Header({
               onClick={onToggleAbout}
               className={`ml-1 p-1 rounded-full transition-colors ${
                 showAbout
-                  ? "text-[var(--primary)] bg-red-50"
+                  ? "text-[var(--primary)] bg-green-50"
                   : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
               title="About POPOS"
@@ -263,7 +261,7 @@ export default function Header({
                         onLogout();
                         setDropdownOpen(false);
                       }}
-                      className="w-full flex items-center gap-2 px-4 py-3 text-sm text-left hover:bg-gray-50 transition-colors text-red-500"
+                      className="w-full flex items-center gap-2 px-4 py-3 text-sm text-left hover:bg-gray-50 transition-colors text-gray-500"
                     >
                       <LogOut className="w-4 h-4" />
                       Sign Out
