@@ -61,10 +61,10 @@ export default function POPOSCard({
               e.stopPropagation();
               onToggleSaved();
             }}
-            className={`p-2 rounded-full backdrop-blur-sm transition-all ring-2 ${
+            className={`p-2 rounded-full backdrop-blur-sm transition-all ${
               isSaved
-                ? "bg-[var(--primary)] text-white ring-white shadow-lg"
-                : "bg-white/90 text-[var(--foreground)] hover:bg-white ring-white/50"
+                ? "bg-[var(--primary)] text-white"
+                : "bg-white/80 text-[var(--foreground)] hover:bg-white"
             }`}
             title={isSaved ? "Remove from favorites" : "Favorite"}
           >
@@ -78,10 +78,10 @@ export default function POPOSCard({
               e.stopPropagation();
               onToggleVisited();
             }}
-            className={`p-2 rounded-full backdrop-blur-sm transition-all ring-2 ${
+            className={`p-2 rounded-full backdrop-blur-sm transition-all ${
               isVisited
-                ? "bg-[var(--secondary)] text-white ring-white shadow-lg"
-                : "bg-white/90 text-[var(--foreground)] hover:bg-white ring-white/50"
+                ? "bg-[var(--secondary)] text-white"
+                : "bg-white/80 text-[var(--foreground)] hover:bg-white"
             }`}
             title={isVisited ? "Mark as not visited" : "Mark as visited"}
           >

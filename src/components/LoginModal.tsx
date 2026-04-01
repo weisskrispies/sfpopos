@@ -48,7 +48,7 @@ export default function LoginModal({
         <div className="flex items-center gap-2 mb-4">
           <img src="/sfpopos/logo.svg" alt="SF POPOS" className="w-8 h-8 rounded-lg" />
           <span className="font-bold text-lg">
-            SF <span className="text-[var(--primary)]">POPOS</span>
+            SF <span className="text-[#4A7C10]">POPOS</span>
           </span>
         </div>
 

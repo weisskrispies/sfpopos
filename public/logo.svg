@@ -1,12 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#ffffff"/>
+  <rect width="512" height="512" rx="80" fill="#ffffff"/>
   <!-- Transamerica Pyramid (center, behind trees) -->
-  <polygon points="256,60 212,430 256,430" fill="#D0D0D0"/>
-  <polygon points="256,60 300,430 256,430" fill="#555555"/>
-  <!-- Left tree -->
-  <polygon points="168,430 56,430 168,120" fill="#3A6610"/>
-  <polygon points="168,430 280,430 168,120" fill="#4A7C10"/>
-  <!-- Right tree -->
-  <polygon points="344,430 232,430 344,120" fill="#3A6610"/>
-  <polygon points="344,430 456,430 344,120" fill="#4A7C10"/>
+  <polygon points="256,55 232,440 256,440" fill="#CCCCCC"/>
+  <polygon points="256,55 280,440 256,440" fill="#5A5A5A"/>
+  <polygon points="256,55 254,55 248,100 256,440" fill="#999999"/>
+  <!-- Left tree - shadow/dark face -->
+  <polygon points="155,440 48,440 155,115" fill="#3A6610"/>
+  <!-- Left tree - lit face -->
+  <polygon points="155,115 155,440 262,440" fill="#4F8A14"/>
+  <!-- Right tree - shadow/dark face -->
+  <polygon points="357,440 250,440 357,115" fill="#3A6610"/>
+  <!-- Right tree - lit face -->
+  <polygon points="357,115 357,440 464,440" fill="#4F8A14"/>
 </svg>
