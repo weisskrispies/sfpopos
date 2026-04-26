@@ -102,7 +102,7 @@ export default function Header({
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <img src="/sfpopos/logo.svg" alt="SF POPOS" className="w-8 h-8 rounded-lg" />
+            <img src="/logo.svg" alt="SF POPOS" className="w-8 h-8 rounded-lg" />
             <span className="text-lg font-bold tracking-tight">
               SF <span className="text-[#4A7C10]">POPOS</span>
             </span>
