@@ -103,12 +103,15 @@ export default function Header({
           {/* Logo */}
           <div className="flex items-center gap-2">
             <img src="/logo.svg" alt="SF Hidden Parks" className="w-8 h-8 rounded-lg" />
-            <span className="text-lg font-bold tracking-tight">
-              SF <span className="text-[#4A7C10]">Hidden Parks</span>
-            </span>
             <button
               onClick={onToggleAbout}
-              className={`ml-1 p-1 rounded-full transition-colors ${
+              className="text-lg font-bold tracking-tight sm:pointer-events-none"
+            >
+              SF <span className="text-[#4A7C10]">Hidden Parks</span>
+            </button>
+            <button
+              onClick={onToggleAbout}
+              className={`ml-1 p-1 rounded-full transition-colors hidden sm:block ${
                 showAbout
                   ? "text-[var(--primary)] bg-red-50"
                   : "text-[var(--muted)] hover:text-[var(--foreground)]"
@@ -166,7 +169,7 @@ export default function Header({
                   <span className="text-sm font-medium hidden sm:block max-w-[100px] truncate">
                     {user.name}
                   </span>
-                  <ChevronDown className="w-3.5 h-3.5 text-[var(--muted)]" />
+                  <ChevronDown className="w-3.5 h-3.5 text-[var(--muted)] hidden sm:block" />
                 </button>
 
                 {/* Dropdown */}
