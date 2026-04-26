@@ -9,16 +9,18 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "SF POPOS — Discover San Francisco's Hidden Public Spaces",
+  title: "SF Hidden Parks — Discover San Francisco's Secret Public Spaces",
   description:
-    "Explore, save, and visit San Francisco's privately owned public open spaces. Find rooftop gardens, plazas, terraces, and parks tucked throughout the city.",
+    "Explore over 90 hidden parks, rooftop gardens, plazas, and terraces tucked throughout San Francisco. Track your visits and find your next favorite spot.",
   keywords: [
     "San Francisco",
     "POPOS",
+    "hidden parks",
     "public spaces",
     "rooftop gardens",
     "urban parks",
     "plazas",
+    "sfhiddenparks",
   ],
 };
 

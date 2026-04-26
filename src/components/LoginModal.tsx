@@ -46,9 +46,9 @@ export default function LoginModal({
         </button>
 
         <div className="flex items-center gap-2 mb-4">
-          <img src="/logo.svg" alt="SF POPOS" className="w-8 h-8 rounded-lg" />
+          <img src="/logo.svg" alt="SF Hidden Parks" className="w-8 h-8 rounded-lg" />
           <span className="font-bold text-lg">
-            SF <span className="text-[#4A7C10]">POPOS</span>
+            SF <span className="text-[#4A7C10]">Hidden Parks</span>
           </span>
         </div>
 

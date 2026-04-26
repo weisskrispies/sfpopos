@@ -1,7 +1,7 @@
 {
-  "name": "SF POPOS",
-  "short_name": "POPOS",
-  "description": "Discover San Francisco's hidden public spaces",
+  "name": "SF Hidden Parks",
+  "short_name": "Hidden Parks",
+  "description": "Discover San Francisco's secret public spaces",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

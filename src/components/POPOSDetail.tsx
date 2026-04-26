@@ -330,7 +330,7 @@ export default function POPOSDetail({
                 onClick={() => {
                   navigator.share?.({
                     title: popos.name,
-                    text: `Check out ${popos.name} - a POPOS in San Francisco`,
+                    text: `Check out ${popos.name} - a hidden public space in San Francisco`,
                     url: directionsUrl,
                   });
                 }}

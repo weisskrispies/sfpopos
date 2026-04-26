@@ -102,9 +102,9 @@ export default function Header({
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <img src="/logo.svg" alt="SF POPOS" className="w-8 h-8 rounded-lg" />
+            <img src="/logo.svg" alt="SF Hidden Parks" className="w-8 h-8 rounded-lg" />
             <span className="text-lg font-bold tracking-tight">
-              SF <span className="text-[#4A7C10]">POPOS</span>
+              SF <span className="text-[#4A7C10]">Hidden Parks</span>
             </span>
             <button
               onClick={onToggleAbout}
@@ -288,34 +288,39 @@ export default function Header({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
             <div className="max-w-2xl">
               <h3 className="font-bold text-sm mb-2">
-                What are POPOS?
+                San Francisco&apos;s Best-Kept Secret: Hidden Parks Everywhere
               </h3>
               <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                <strong>Privately Owned Public Open Spaces</strong> are publicly
-                accessible spaces in privately owned buildings. Since the 1980s,
-                San Francisco has required downtown developers to provide these
-                spaces in exchange for building taller or denser. There are over
-                80 POPOS throughout the city — plazas, rooftop gardens, indoor
-                atriums, and hidden terraces — all free and open to the public.
+                Scattered across downtown San Francisco are over 90 publicly
+                accessible parks, plazas, gardens, and terraces that most people
+                walk right past. They&apos;re called <strong>POPOS</strong> — Privately
+                Owned Public Open Spaces — and they exist because the city has
+                required developers to include public space in their buildings
+                since the 1980s.
               </p>
               <p className="text-sm text-gray-700 leading-relaxed mb-2">
-                Many of these spaces are tucked away in lobbies, up elevators,
-                or behind unassuming doors. They&apos;re some of SF&apos;s best-kept
-                secrets — quiet spots to read, eat lunch, or just escape the
-                bustle.
+                Some are sunny rooftop gardens with panoramic views. Others are
+                quiet indoor atriums tucked behind office lobbies, or pocket
+                parks hidden down an alley. They&apos;re all free, open to the
+                public, and waiting to be discovered.
+              </p>
+              <p className="text-sm text-gray-700 leading-relaxed mb-2">
+                <strong>SF Hidden Parks</strong> is your guide to finding them
+                all. Browse the list, explore the map, and track which ones
+                you&apos;ve visited. Sign in to save your favorites and sync your
+                progress across devices. How many can you find?
               </p>
               <p className="text-xs text-gray-500">
-                This guide was built to help people discover and explore these
-                hidden gems. Data sourced from{" "}
+                Space data sourced from{" "}
                 <a
                   href="https://data.sfgov.org/Culture-and-Recreation/Map-of-Privately-Owned-Public-Open-Spaces/33jz-gqck"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-[var(--primary)] underline"
                 >
-                  SF Open Data
+                  DataSF
                 </a>
-                .
+                . Built with love for the city.
               </p>
             </div>
           </div>
