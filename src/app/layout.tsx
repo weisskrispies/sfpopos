@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-// Firebase Auth + Firestore enabled
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -11,7 +10,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "SF Hidden Parks — Discover San Francisco's Secret Public Spaces",
   description:
-    "Explore over 90 hidden parks, rooftop gardens, plazas, and terraces tucked throughout San Francisco. Track your visits and find your next favorite spot.",
+    "Explore 91 privately owned public open spaces (POPOS) hidden across San Francisco. Find rooftop gardens, plazas, and urban parks open to everyone — searchable by neighborhood and amenity.",
   keywords: [
     "San Francisco",
     "POPOS",
@@ -21,7 +20,27 @@ export const metadata: Metadata = {
     "urban parks",
     "plazas",
     "sfhiddenparks",
+    "privately owned public open spaces",
   ],
+  robots: { index: true, follow: true },
+  alternates: {
+    canonical: "https://sfhiddenparks.com",
+  },
+  openGraph: {
+    title: "SF Hidden Parks — Discover San Francisco's Secret Public Spaces",
+    description:
+      "Explore 91 privately owned public open spaces (POPOS) hidden across San Francisco. Find rooftop gardens, plazas, and urban parks open to everyone.",
+    url: "https://sfhiddenparks.com",
+    siteName: "SF Hidden Parks",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary",
+    title: "SF Hidden Parks — Discover San Francisco's Secret Public Spaces",
+    description:
+      "Explore 91 hidden public spaces across San Francisco — rooftop gardens, plazas, and urban parks open to everyone.",
+  },
 };
 
 export default function RootLayout({
@@ -36,7 +55,7 @@ export default function RootLayout({
         <link rel="icon" href="/logo.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#4A7C10" /> {/* green to match logo */}
+        <meta name="theme-color" content="#4A7C10" />
       </head>
       <body className="h-full flex flex-col">{children}</body>
     </html>

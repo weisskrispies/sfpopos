@@ -154,6 +154,16 @@ export default function Home() {
           />
           <main className="flex-1 overflow-y-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+              {!search.query && !search.selectedType && !search.selectedNeighborhood && !search.showSavedOnly && !search.showVisitedOnly && !search.showNotVisitedOnly && (
+                <div className="mb-6">
+                  <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+                    Discover San Francisco&apos;s Hidden Public Spaces
+                  </h1>
+                  <p className="text-sm sm:text-base text-[var(--muted)] leading-relaxed max-w-2xl">
+                    San Francisco has over 90 privately owned public open spaces (POPOS) — rooftop gardens, plazas, terraces, and pocket parks tucked inside and around downtown buildings, all free and open to the public. This directory helps you find, explore, and track them all.
+                  </p>
+                </div>
+              )}
               {filteredSpaces.length === 0 ? (
                 <div className="text-center py-16">
                   <p className="text-5xl mb-4">🔍</p>
