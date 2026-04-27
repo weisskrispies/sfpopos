@@ -51,13 +51,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <head>
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-235LXYS215" />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-12695LHH4E" />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-235LXYS215');`,
+gtag('config', 'G-12695LHH4E');`,
           }}
         />
         <link rel="icon" href="/favicon.ico" sizes="any" />
