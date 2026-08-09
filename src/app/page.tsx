@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { POPOS } from "@/data/popos";
 import { useSavedPopos, useUserLocation, useSearch, useAuth } from "@/lib/hooks";
 import { useAdminEdits, getMergedData, isAdmin } from "@/lib/admin";
-import { filterPopos } from "@/lib/utils";
+import { filterPopos, sortPopos, getTypeEmoji } from "@/lib/utils";
 import Header from "@/components/Header";
 import SearchBar from "@/components/SearchBar";
 import POPOSCard from "@/components/POPOSCard";
@@ -26,13 +26,30 @@ export default function Home() {
   const [activeView, setActiveView] = useState<"list" | "map">("list");
   const [selectedPopos, setSelectedPopos] = useState<POPOS | null>(null);
   const [editingPopos, setEditingPopos] = useState<POPOS | null>(null);
+  const [creatingNew, setCreatingNew] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
 
-  const { saved, visited, toggleSaved, toggleVisited } = useSavedPopos();
+  const { saved, visited, toggleSaved, toggleVisited, setUid } = useSavedPopos();
   const { location } = useUserLocation();
-  const { user, loginWithGoogle, loginWithEmail, logout, googleAvailable } = useAuth();
+  const { user, loginWithGoogle, loginWithEmail, logout, googleAvailable } =
+    useAuth();
+
+  // Sync user ID to saved/visited hook for Firestore
+  useEffect(() => {
+    setUid(user?.id || null);
+  }, [user?.id, setUid]);
   const search = useSearch();
-  const { edits, updatePopos, exportFullData, editCount } = useAdminEdits();
+  const {
+    edits,
+    added,
+    deleted,
+    updatePopos,
+    deletePopos,
+    addPopos,
+    exportFullData,
+    editCount,
+  } = useAdminEdits();
 
   const handleToggleSaved = (id: string) => {
     if (!user) {
@@ -50,21 +67,17 @@ export default function Home() {
     toggleVisited(id);
   };
 
-  const mergedData = useMemo(() => getMergedData(edits), [edits]);
+  const mergedData = useMemo(
+    () => getMergedData(edits, added, deleted),
+    [edits, added, deleted]
+  );
 
-  const filteredSpaces = useMemo(
-    () =>
-      filterPopos(
-        mergedData,
-        search.query,
-        search.selectedType,
-        search.selectedNeighborhood,
-        saved,
-        visited,
-        search.showSavedOnly,
-        search.showVisitedOnly
-      ),
-    [
+  // Serialize Sets so useMemo deps detect changes reliably
+  const savedKey = [...saved].sort().join(",");
+  const visitedKey = [...visited].sort().join(",");
+
+  const filteredSpaces = useMemo(() => {
+    const filtered = filterPopos(
       mergedData,
       search.query,
       search.selectedType,
@@ -73,9 +86,32 @@ export default function Home() {
       visited,
       search.showSavedOnly,
       search.showVisitedOnly,
-      edits,
-    ]
-  );
+      search.showNotVisitedOnly
+    );
+    return sortPopos(filtered, search.sortMode, location);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    mergedData,
+    search.query,
+    search.selectedType,
+    search.selectedNeighborhood,
+    savedKey,
+    visitedKey,
+    search.showSavedOnly,
+    search.showVisitedOnly,
+    search.showNotVisitedOnly,
+    search.sortMode,
+    location,
+  ]);
+
+  // Profile stats
+  const visitedCount = mergedData.filter((p) => visited.has(p.id)).length;
+  const visitedTypes: Record<string, number> = {};
+  mergedData.forEach((p) => {
+    if (visited.has(p.id)) {
+      visitedTypes[p.type] = (visitedTypes[p.type] || 0) + 1;
+    }
+  });
 
   return (
     <div className="h-full flex flex-col">
@@ -87,7 +123,13 @@ export default function Home() {
         onViewChange={setActiveView}
         isAdmin={isAdmin(user?.email)}
         onExportData={exportFullData}
+        onAddPopos={() => setCreatingNew(true)}
         editCount={editCount}
+        visitedCount={visitedCount}
+        totalCount={mergedData.length}
+        visitedTypes={visitedTypes}
+        showAbout={showAbout}
+        onToggleAbout={() => setShowAbout(!showAbout)}
       />
 
       {activeView === "list" ? (
@@ -103,10 +145,25 @@ export default function Home() {
             onShowSavedOnly={search.setShowSavedOnly}
             showVisitedOnly={search.showVisitedOnly}
             onShowVisitedOnly={search.setShowVisitedOnly}
+            showNotVisitedOnly={search.showNotVisitedOnly}
+            onShowNotVisitedOnly={search.setShowNotVisitedOnly}
+            sortMode={search.sortMode}
+            onSortModeChange={search.setSortMode}
+            hasLocation={!!location}
             resultCount={filteredSpaces.length}
           />
           <main className="flex-1 overflow-y-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
+              {!search.query && !search.selectedType && !search.selectedNeighborhood && !search.showSavedOnly && !search.showVisitedOnly && !search.showNotVisitedOnly && (
+                <div className="mb-6">
+                  <h1 className="text-2xl sm:text-3xl font-bold mb-2">
+                    Discover San Francisco&apos;s Hidden Public Spaces
+                  </h1>
+                  <p className="text-sm sm:text-base text-[var(--muted)] leading-relaxed max-w-2xl">
+                    San Francisco has over 90 privately owned public open spaces (POPOS) — rooftop gardens, plazas, terraces, and pocket parks tucked inside and around downtown buildings, all free and open to the public. This directory helps you find, explore, and track them all.
+                  </p>
+                </div>
+              )}
               {filteredSpaces.length === 0 ? (
                 <div className="text-center py-16">
                   <p className="text-5xl mb-4">🔍</p>
@@ -155,7 +212,9 @@ export default function Home() {
       {/* Detail modal */}
       {selectedPopos && (
         <POPOSDetail
-          popos={mergedData.find((p) => p.id === selectedPopos.id) || selectedPopos}
+          popos={
+            mergedData.find((p) => p.id === selectedPopos.id) || selectedPopos
+          }
           isSaved={saved.has(selectedPopos.id)}
           isVisited={visited.has(selectedPopos.id)}
           onToggleSaved={() => handleToggleSaved(selectedPopos.id)}
@@ -163,19 +222,41 @@ export default function Home() {
           onClose={() => setSelectedPopos(null)}
           userLocation={location}
           isAdmin={isAdmin(user?.email)}
-          onEdit={() => setEditingPopos(mergedData.find((p) => p.id === selectedPopos.id) || selectedPopos)}
+          onEdit={() =>
+            setEditingPopos(
+              mergedData.find((p) => p.id === selectedPopos.id) ||
+                selectedPopos
+            )
+          }
         />
       )}
 
       {/* Admin edit modal */}
-      {editingPopos && (
+      {(editingPopos || creatingNew) && (
         <AdminEditModal
-          popos={editingPopos}
-          onSave={(updates) => {
-            updatePopos(editingPopos.id, updates);
+          popos={creatingNew ? null : editingPopos}
+          onSave={(data, isNew) => {
+            if (isNew) {
+              addPopos(data as POPOS);
+            } else if (editingPopos) {
+              updatePopos(editingPopos.id, data);
+            }
             setEditingPopos(null);
+            setCreatingNew(false);
           }}
-          onClose={() => setEditingPopos(null)}
+          onDelete={
+            editingPopos
+              ? (id) => {
+                  deletePopos(id);
+                  setEditingPopos(null);
+                  setSelectedPopos(null);
+                }
+              : undefined
+          }
+          onClose={() => {
+            setEditingPopos(null);
+            setCreatingNew(false);
+          }}
         />
       )}
 

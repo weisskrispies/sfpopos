@@ -46,11 +46,9 @@ export default function LoginModal({
         </button>
 
         <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 bg-[var(--primary)] rounded-lg flex items-center justify-center">
-            <MapPin className="w-5 h-5 text-white" />
-          </div>
+          <img src="/logo.png" alt="SF Hidden Parks" className="w-8 h-8" />
           <span className="font-bold text-lg">
-            SF <span className="text-[var(--primary)]">POPOS</span>
+            SF <span className="text-[#4A7C10]">Hidden Parks</span>
           </span>
         </div>
 

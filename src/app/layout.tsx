@@ -1,18 +1,46 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export const metadata: Metadata = {
-  title: "SF POPOS — Discover San Francisco's Hidden Public Spaces",
+  title: "SF Hidden Parks — Discover San Francisco's Secret Public Spaces",
   description:
-    "Explore, save, and visit San Francisco's privately owned public open spaces. Find rooftop gardens, plazas, terraces, and parks tucked throughout the city.",
+    "Explore 91 privately owned public open spaces (POPOS) hidden across San Francisco. Find rooftop gardens, plazas, and urban parks open to everyone — searchable by neighborhood and amenity.",
   keywords: [
     "San Francisco",
     "POPOS",
+    "hidden parks",
     "public spaces",
     "rooftop gardens",
     "urban parks",
     "plazas",
+    "sfhiddenparks",
+    "privately owned public open spaces",
   ],
+  robots: { index: true, follow: true },
+  alternates: {
+    canonical: "https://sfhiddenparks.com",
+  },
+  openGraph: {
+    title: "SF Hidden Parks — Discover San Francisco's Secret Public Spaces",
+    description:
+      "Explore 91 privately owned public open spaces (POPOS) hidden across San Francisco. Find rooftop gardens, plazas, and urban parks open to everyone.",
+    url: "https://sfhiddenparks.com",
+    siteName: "SF Hidden Parks",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary",
+    title: "SF Hidden Parks — Discover San Francisco's Secret Public Spaces",
+    description:
+      "Explore 91 hidden public spaces across San Francisco — rooftop gardens, plazas, and urban parks open to everyone.",
+  },
 };
 
 export default function RootLayout({
@@ -22,6 +50,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
+      <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-12695LHH4E" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-12695LHH4E');`,
+          }}
+        />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#4A7C10" />
+      </head>
       <body className="h-full flex flex-col">{children}</body>
     </html>
   );
