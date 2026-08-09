@@ -61,7 +61,7 @@ gtag('config', 'G-12695LHH4E');`,
           }}
         />
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+        <link rel="icon" href="/logo.png" type="image/png" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#4A7C10" />
