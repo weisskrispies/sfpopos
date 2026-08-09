@@ -62,7 +62,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Fountain", "Art", "Indoor", "Quiet Space"],
     hours: "Daily 10:00 AM - 6:00 PM",
     accessibility: "Fully wheelchair accessible",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/100-pine/100-pine-01.jpeg", "/Photos/100-pine/100-pine-02.jpeg", "/Photos/100-pine/100-pine-03.jpeg", "/Photos/100-pine/100-pine-04.jpeg"],
     yearOpened: "1972",
     transitNearby: ["BART - Embarcadero", "Muni - 1, 38"],
     howToFind: "Enter through the building lobby at 100 Pine Street, or access via a passageway off Front Street. The garden is at ground level behind the lobby."
@@ -98,7 +98,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Pergola", "Water Feature", "Garden", "Historic Plaque"],
     hours: "Daylight Hours.",
     accessibility: "Step-free access from Commercial St",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/empire-park/empire-park-01.jpeg", "/Photos/empire-park/empire-park-02.jpeg", "/Photos/empire-park/empire-park-03.jpeg"],
     yearOpened: "1988",
     transitNearby: ["BART - Montgomery", "Muni - 10, 12"],
     howToFind: "Walk down Commercial Street from Montgomery — the park is on the right side, tucked behind the old Transamerica building. Look for the pergola and vine-covered entrance around the block from Transamerica Redwood Park."
@@ -115,7 +115,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Skyline Views", "Historic Building", "Plants"],
     hours: "Mon-Fri 8:00 AM - 6:00 PM",
     accessibility: "Elevator access to rooftop",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/1-kearny/1-kearny-01.jpeg", "/Photos/1-kearny/1-kearny-02.jpeg", "/Photos/1-kearny/1-kearny-03.jpeg", "/Photos/1-kearny/1-kearny-04.jpeg"],
     yearOpened: "2012",
     transitNearby: ["BART - Montgomery", "Muni - Powell Station", "Cable Car"]
   },
@@ -259,7 +259,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Garden", "Quiet Space", "Trees"],
     hours: "Mon-Fri 9:00 AM - 5:00 PM",
     accessibility: "Elevator access available",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/150-california/150-california-01.jpeg", "/Photos/150-california/150-california-02.jpeg", "/Photos/150-california/150-california-03.jpeg", "/Photos/150-california/150-california-04.jpeg"],
     yearOpened: "1989",
     transitNearby: ["BART - Embarcadero", "Muni - 1, 38"]
   },
@@ -404,7 +404,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Walking Path", "Food & Drink", "Shopping", "Bay Views"],
     hours: "Daily 6:00 AM - 10:00 PM",
     accessibility: "Elevator access at multiple points",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/embarcadero-center/embarcadero-center-01.jpeg", "/Photos/embarcadero-center/embarcadero-center-02.jpeg", "/Photos/embarcadero-center/embarcadero-center-03.jpeg", "/Photos/embarcadero-center/embarcadero-center-04.jpeg"],
     yearOpened: "1981",
     transitNearby: ["BART - Embarcadero", "Muni - F Line"]
   },
@@ -687,7 +687,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "15 trees, 12 large planters with flowers", "Food Nearby"],
     hours: "Open at all times",
     accessibility: "Direct",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/425-market/425-market-01.jpeg", "/Photos/425-market/425-market-02.jpeg", "/Photos/425-market/425-market-03.jpeg"],
     yearOpened: "1973",
     transitNearby: ["BART - Montgomery"]
   },
@@ -767,7 +767,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Trees, ferns, arbor, planters", "Food Nearby", "Public Art"],
     hours: "Open at all times",
     accessibility: "Direct, indirect",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/embarcadero-center/embarcadero-center-01.jpeg", "/Photos/embarcadero-center/embarcadero-center-02.jpeg", "/Photos/embarcadero-center/embarcadero-center-03.jpeg", "/Photos/embarcadero-center/embarcadero-center-04.jpeg"],
     yearOpened: "1985",
     transitNearby: ["BART - Montgomery"]
   },
@@ -1405,7 +1405,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Few spare plantings, water feature", "Public Art"],
     hours: "Open at all times",
     accessibility: "Indirect",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/456-montgomery/456-montgomery-01.jpeg", "/Photos/456-montgomery/456-montgomery-02.jpeg", "/Photos/456-montgomery/456-montgomery-03.jpeg", "/Photos/456-montgomery/456-montgomery-04.jpeg"],
     yearOpened: "1983",
     transitNearby: ["BART - Montgomery"]
   },
@@ -1421,7 +1421,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Food Nearby", "Restrooms"],
     hours: "Mon-Fri 8:00 AM - 6:00 PM",
     accessibility: "Contact building for details",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/1-sansome/1-sansome-01.jpeg", "/Photos/1-sansome/1-sansome-02.jpeg", "/Photos/1-sansome/1-sansome-03.jpeg"],
     yearOpened: "1983",
     transitNearby: ["BART - Montgomery"]
   },
@@ -1637,7 +1637,7 @@ export const poposData: POPOS[] = [
     features: ["Planting and flowers", "Food Nearby"],
     hours: "Mon-Fri 8:00 AM - 6:00 PM",
     accessibility: "Contact building for details",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/100-pine/100-pine-01.jpeg", "/Photos/100-pine/100-pine-02.jpeg", "/Photos/100-pine/100-pine-03.jpeg", "/Photos/100-pine/100-pine-04.jpeg"],
     yearOpened: "1972",
     transitNearby: ["BART - Embarcadero"]
   },
@@ -1701,7 +1701,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Tall grasses and shrubs, central pool surrounded by plants."],
     hours: "Open at all times",
     accessibility: "Direct",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/555-california/555-california-01.jpeg", "/Photos/555-california/555-california-02.jpeg", "/Photos/555-california/555-california-03.jpeg", "/Photos/555-california/555-california-04.jpeg"],
     yearOpened: "1969",
     transitNearby: ["BART - Montgomery"]
   },
@@ -1749,7 +1749,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Diverse plants, grasses, and water feature.", "Restrooms"],
     hours: "Open at all times",
     accessibility: "Direct",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/555-Market/555-market-01.jpeg", "/Photos/555-Market/555-market-02.jpeg", "/Photos/555-Market/555-market-03.jpeg", "/Photos/555-Market/555-market-04.jpeg", "/Photos/555-Market/555-market-05.jpeg"],
     yearOpened: "1965",
     transitNearby: ["BART - Montgomery"]
   },
@@ -1820,7 +1820,7 @@ export const poposData: POPOS[] = [
     ],
     hours: "Open at all times",
     accessibility: "Indirect",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/1-bush-plaza/1-bush-01.jpeg", "/Photos/1-bush-plaza/1-bush-02.jpeg", "/Photos/1-bush-plaza/1-bush-03.jpeg"],
     yearOpened: "1959",
     transitNearby: ["BART - Montgomery"]
   },
@@ -1906,7 +1906,7 @@ export const poposData: POPOS[] = [
     features: ["Seating", "Beautifl terraced seating with abundant plantings", "Food Nearby"],
     hours: "Open at all times",
     accessibility: "Direct",
-    images: ["/images/placeholder.jpg"],
+    images: ["/Photos/101-california/101-california-01.jpeg", "/Photos/101-california/101-california-02.jpeg", "/Photos/101-california/101-california-03.jpeg", "/Photos/101-california/101-california-04.jpeg"],
     yearOpened: "1982",
     transitNearby: ["BART - Embarcadero"]
   },
