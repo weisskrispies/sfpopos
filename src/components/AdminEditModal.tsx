@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { X, Save, Plus, Trash2 } from "lucide-react";
+import { useState, useRef, useCallback } from "react";
+import { X, Save, Plus, Trash2, Upload, ImagePlus, Loader2 } from "lucide-react";
 import { POPOS } from "@/data/popos";
+import { uploadPoposPhoto, isStorageConfigured } from "@/lib/storage";
 
 interface AdminEditModalProps {
   popos: POPOS | null; // null = create new
@@ -69,26 +70,81 @@ export default function AdminEditModal({
   const [howToFind, setHowToFind] = useState(initial.howToFind || "");
   const [accessibility, setAccessibility] = useState(initial.accessibility);
   const [features, setFeatures] = useState(initial.features.join(", "));
-  const [images, setImages] = useState(initial.images.join("\n"));
+  const [imageList, setImageList] = useState<string[]>([...initial.images]);
   const [imageUrl, setImageUrl] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  const [uploading, setUploading] = useState(false);
+  const [uploadCount, setUploadCount] = useState({ done: 0, total: 0 });
+  const [dragActive, setDragActive] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const poposId = isNew
+    ? name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "") || "new-space"
+    : initial.id;
+
+  const storageReady = isStorageConfigured();
+
+  const handleFiles = useCallback(
+    async (files: FileList | File[]) => {
+      const images = Array.from(files).filter((f) =>
+        f.type.startsWith("image/")
+      );
+      if (images.length === 0) return;
+
+      if (!storageReady) {
+        alert(
+          "Photo upload requires Firebase Storage. Add NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET to your environment."
+        );
+        return;
+      }
+
+      setUploading(true);
+      setUploadCount({ done: 0, total: images.length });
+
+      const newUrls: string[] = [];
+      for (const file of images) {
+        try {
+          const url = await uploadPoposPhoto(poposId, file);
+          newUrls.push(url);
+          setUploadCount((prev) => ({ ...prev, done: prev.done + 1 }));
+        } catch (err) {
+          console.error("Upload failed:", err);
+        }
+      }
+
+      if (newUrls.length > 0) {
+        setImageList((prev) => [...prev, ...newUrls]);
+      }
+      setUploading(false);
+    },
+    [poposId, storageReady]
+  );
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setDragActive(false);
+      handleFiles(e.dataTransfer.files);
+    },
+    [handleFiles]
+  );
+
+  const removeImage = (index: number) => {
+    setImageList((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const imageList = images
-      .split("\n")
-      .map((u) => u.trim())
-      .filter(Boolean);
-    if (imageUrl.trim()) imageList.push(imageUrl.trim());
+    const finalImages = [...imageList];
+    if (imageUrl.trim()) finalImages.push(imageUrl.trim());
 
     const data: POPOS = {
-      id: isNew
-        ? name
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/-+/g, "-")
-            .replace(/^-|-$/g, "")
-        : initial.id,
+      id: poposId,
       name,
       address,
       neighborhood,
@@ -103,7 +159,7 @@ export default function AdminEditModal({
         .split(",")
         .map((f) => f.trim())
         .filter(Boolean),
-      images: imageList,
+      images: finalImages,
       transitNearby: initial.transitNearby,
     };
 
@@ -250,40 +306,96 @@ export default function AdminEditModal({
             />
           </Field>
 
-          <Field label="Image URLs (one per line)">
-            <textarea
-              value={images}
-              onChange={(e) => setImages(e.target.value)}
-              rows={2}
-              placeholder="https://example.com/photo.jpg"
-              className="input-field resize-y font-mono text-xs"
-            />
-          </Field>
+          {/* Photos section */}
+          <Field label="Photos">
+            <div className="space-y-3">
+              {/* Existing photos grid */}
+              {imageList.length > 0 && (
+                <div className="grid grid-cols-3 gap-2">
+                  {imageList.map((url, i) => (
+                    <div key={i} className="relative group aspect-square rounded-lg overflow-hidden bg-gray-100">
+                      <img
+                        src={url}
+                        alt={`Photo ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(i)}
+                        className="absolute top-1 right-1 p-1 bg-black/60 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-          <Field label="Add image URL">
-            <div className="flex gap-2">
-              <input
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                placeholder="https://..."
-                className="input-field flex-1"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  if (imageUrl.trim()) {
-                    setImages((prev) =>
-                      prev
-                        ? prev + "\n" + imageUrl.trim()
-                        : imageUrl.trim()
-                    );
-                    setImageUrl("");
-                  }
+              {/* Upload dropzone */}
+              <div
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setDragActive(true);
                 }}
-                className="px-3 py-2 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+                onDragLeave={() => setDragActive(false)}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+                className={`relative flex flex-col items-center justify-center gap-2 p-6 border-2 border-dashed rounded-xl cursor-pointer transition-colors ${
+                  dragActive
+                    ? "border-[var(--primary)] bg-red-50"
+                    : "border-gray-200 hover:border-gray-400 hover:bg-gray-50"
+                } ${uploading ? "pointer-events-none opacity-60" : ""}`}
               >
-                <Plus className="w-4 h-4" />
-              </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                  onChange={(e) => {
+                    if (e.target.files) handleFiles(e.target.files);
+                    e.target.value = "";
+                  }}
+                />
+                {uploading ? (
+                  <>
+                    <Loader2 className="w-6 h-6 text-[var(--primary)] animate-spin" />
+                    <p className="text-sm text-[var(--muted)]">
+                      Uploading {uploadCount.done}/{uploadCount.total}...
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <ImagePlus className="w-6 h-6 text-gray-400" />
+                    <p className="text-sm text-[var(--muted)]">
+                      Drop photos here or tap to browse
+                    </p>
+                    <p className="text-[10px] text-gray-400">JPG, PNG, WebP</p>
+                  </>
+                )}
+              </div>
+
+              {/* URL fallback */}
+              <div className="flex gap-2">
+                <input
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="Or paste an image URL..."
+                  className="input-field flex-1 text-xs"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (imageUrl.trim()) {
+                      setImageList((prev) => [...prev, imageUrl.trim()]);
+                      setImageUrl("");
+                    }
+                  }}
+                  className="px-3 py-2 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </Field>
 
@@ -291,7 +403,8 @@ export default function AdminEditModal({
           <div className="flex gap-2 pt-2">
             <button
               type="submit"
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-[var(--primary)] text-white rounded-xl font-medium text-sm hover:bg-[var(--primary-dark)] transition-colors"
+              disabled={uploading}
+              className="flex-1 flex items-center justify-center gap-2 py-3 bg-[var(--primary)] text-white rounded-xl font-medium text-sm hover:bg-[var(--primary-dark)] transition-colors disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
               {isNew ? "Add Space" : "Save Changes"}
