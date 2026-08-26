@@ -98,7 +98,7 @@ export default function AdminEditModal({
 
       if (!storageReady) {
         alert(
-          "Photo upload requires Firebase Storage. Add NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET to your environment."
+          "Photo upload requires Supabase. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment."
         );
         return;
       }
