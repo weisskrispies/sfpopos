@@ -14,6 +14,18 @@ export function isStorageConfigured(): boolean {
   return !!supabase;
 }
 
+export function getStorageDebugInfo(): string {
+  const hasUrl = !!supabaseUrl;
+  const hasKey = !!supabaseAnonKey;
+  const urlPreview = supabaseUrl
+    ? supabaseUrl.slice(0, 30) + "..."
+    : "(empty)";
+  const keyPreview = supabaseAnonKey
+    ? supabaseAnonKey.slice(0, 20) + "..."
+    : "(empty)";
+  return `URL: ${urlPreview} | Key: ${keyPreview} | Client: ${supabase ? "yes" : "no"}`;
+}
+
 export async function uploadPoposPhoto(
   poposId: string,
   file: File

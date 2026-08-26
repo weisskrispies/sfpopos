@@ -13,7 +13,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { POPOS } from "@/data/popos";
-import { uploadPoposPhoto, isStorageConfigured } from "@/lib/storage";
+import { uploadPoposPhoto, isStorageConfigured, getStorageDebugInfo } from "@/lib/storage";
 
 interface AdminEditModalProps {
   popos: POPOS | null;
@@ -140,7 +140,7 @@ export default function AdminEditModal({
         setImageList((prev) => [...prev, ...newUrls]);
       }
       if (errors.length > 0) {
-        setUploadError(errors.join("; "));
+        setUploadError(`${errors.join("; ")} [${getStorageDebugInfo()}]`);
       }
       setUploading(false);
     },
