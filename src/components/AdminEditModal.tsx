@@ -1,12 +1,22 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { X, Save, Plus, Trash2, Upload, ImagePlus, Loader2 } from "lucide-react";
+import {
+  X,
+  Save,
+  Plus,
+  Trash2,
+  ImagePlus,
+  Loader2,
+  ChevronLeft,
+  ChevronRight,
+  AlertCircle,
+} from "lucide-react";
 import { POPOS } from "@/data/popos";
 import { uploadPoposPhoto, isStorageConfigured } from "@/lib/storage";
 
 interface AdminEditModalProps {
-  popos: POPOS | null; // null = create new
+  popos: POPOS | null;
   onSave: (popos: POPOS | Partial<POPOS>, isNew?: boolean) => void;
   onDelete?: (id: string) => void;
   onClose: () => void;
@@ -76,6 +86,7 @@ export default function AdminEditModal({
 
   const [uploading, setUploading] = useState(false);
   const [uploadCount, setUploadCount] = useState({ done: 0, total: 0 });
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -91,34 +102,45 @@ export default function AdminEditModal({
 
   const handleFiles = useCallback(
     async (files: FileList | File[]) => {
-      const images = Array.from(files).filter((f) =>
-        f.type.startsWith("image/")
+      const images = Array.from(files).filter(
+        (f) => f.type.startsWith("image/") || /\.(jpe?g|png|webp|heic)$/i.test(f.name)
       );
-      if (images.length === 0) return;
+      if (images.length === 0) {
+        setUploadError("No image files selected.");
+        return;
+      }
 
       if (!storageReady) {
-        alert(
-          "Photo upload requires Supabase. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment."
+        setUploadError(
+          "Photo upload not configured. Supabase credentials missing."
         );
         return;
       }
 
       setUploading(true);
+      setUploadError(null);
       setUploadCount({ done: 0, total: images.length });
 
       const newUrls: string[] = [];
+      const errors: string[] = [];
+
       for (const file of images) {
         try {
           const url = await uploadPoposPhoto(poposId, file);
           newUrls.push(url);
-          setUploadCount((prev) => ({ ...prev, done: prev.done + 1 }));
         } catch (err) {
-          console.error("Upload failed:", err);
+          errors.push(
+            err instanceof Error ? err.message : `Failed to upload ${file.name}`
+          );
         }
+        setUploadCount((prev) => ({ ...prev, done: prev.done + 1 }));
       }
 
       if (newUrls.length > 0) {
         setImageList((prev) => [...prev, ...newUrls]);
+      }
+      if (errors.length > 0) {
+        setUploadError(errors.join("; "));
       }
       setUploading(false);
     },
@@ -136,6 +158,16 @@ export default function AdminEditModal({
 
   const removeImage = (index: number) => {
     setImageList((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const moveImage = (index: number, direction: -1 | 1) => {
+    const target = index + direction;
+    if (target < 0 || target >= imageList.length) return;
+    setImageList((prev) => {
+      const next = [...prev];
+      [next[index], next[target]] = [next[target], next[index]];
+      return next;
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -307,25 +339,53 @@ export default function AdminEditModal({
           </Field>
 
           {/* Photos section */}
-          <Field label="Photos">
+          <Field label={`Photos (${imageList.length})`}>
             <div className="space-y-3">
               {/* Existing photos grid */}
               {imageList.length > 0 && (
                 <div className="grid grid-cols-3 gap-2">
                   {imageList.map((url, i) => (
-                    <div key={i} className="relative group aspect-square rounded-lg overflow-hidden bg-gray-100">
+                    <div
+                      key={`${url}-${i}`}
+                      className="relative aspect-square rounded-lg overflow-hidden bg-gray-100"
+                    >
                       <img
                         src={url}
                         alt={`Photo ${i + 1}`}
                         className="w-full h-full object-cover"
                       />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(i)}
-                        className="absolute top-1 right-1 p-1 bg-black/60 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
+                      {/* Controls overlay */}
+                      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between p-1 bg-gradient-to-t from-black/60 to-transparent">
+                        <div className="flex gap-0.5">
+                          <button
+                            type="button"
+                            onClick={() => moveImage(i, -1)}
+                            disabled={i === 0}
+                            className="p-1 text-white/80 hover:text-white disabled:text-white/30 transition-colors"
+                          >
+                            <ChevronLeft className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => moveImage(i, 1)}
+                            disabled={i === imageList.length - 1}
+                            className="p-1 text-white/80 hover:text-white disabled:text-white/30 transition-colors"
+                          >
+                            <ChevronRight className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeImage(i)}
+                          className="p-1 text-red-300 hover:text-red-400 transition-colors"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      {/* Position badge */}
+                      <span className="absolute top-1 left-1 px-1.5 py-0.5 bg-black/50 text-white text-[10px] rounded-full">
+                        {i + 1}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -368,12 +428,23 @@ export default function AdminEditModal({
                   <>
                     <ImagePlus className="w-6 h-6 text-gray-400" />
                     <p className="text-sm text-[var(--muted)]">
-                      Drop photos here or tap to browse
+                      Tap to add photos
                     </p>
                     <p className="text-[10px] text-gray-400">JPG, PNG, WebP</p>
                   </>
                 )}
               </div>
+
+              {/* Upload error */}
+              {uploadError && (
+                <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-medium">Upload failed</p>
+                    <p className="mt-0.5">{uploadError}</p>
+                  </div>
+                </div>
+              )}
 
               {/* URL fallback */}
               <div className="flex gap-2">
