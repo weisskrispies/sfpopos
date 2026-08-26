@@ -5,6 +5,7 @@ import { POPOS } from "@/data/popos";
 import { useSavedPopos, useUserLocation, useSearch, useAuth } from "@/lib/hooks";
 import { useAdminEdits, getMergedData, isAdmin } from "@/lib/admin";
 import { filterPopos, sortPopos, getTypeEmoji } from "@/lib/utils";
+import LocationBanner from "@/components/LocationBanner";
 import Header from "@/components/Header";
 import SearchBar from "@/components/SearchBar";
 import POPOSCard from "@/components/POPOSCard";
@@ -31,7 +32,7 @@ export default function Home() {
   const [showAbout, setShowAbout] = useState(false);
 
   const { saved, visited, toggleSaved, toggleVisited, setUid } = useSavedPopos();
-  const { location } = useUserLocation();
+  const { location, locationEnabled, setLocationEnabled } = useUserLocation();
   const { user, loginWithGoogle, loginWithEmail, logout, googleAvailable } =
     useAuth();
 
@@ -132,6 +133,12 @@ export default function Home() {
         onToggleAbout={() => setShowAbout(!showAbout)}
       />
 
+      <LocationBanner
+        locationEnabled={locationEnabled}
+        onEnable={() => setLocationEnabled(true)}
+        onDismiss={() => setLocationEnabled(false)}
+      />
+
       {activeView === "list" ? (
         <>
           <SearchBar
@@ -150,6 +157,7 @@ export default function Home() {
             sortMode={search.sortMode}
             onSortModeChange={search.setSortMode}
             hasLocation={!!location}
+            onEnableLocation={() => setLocationEnabled(true)}
             resultCount={filteredSpaces.length}
           />
           <main className="flex-1 overflow-y-auto">

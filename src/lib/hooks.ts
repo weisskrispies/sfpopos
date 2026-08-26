@@ -156,14 +156,32 @@ export function useSavedPopos() {
 }
 
 // --- User Location ---
+const LOCATION_KEY = "sfpopos_location_enabled";
+
 export function useUserLocation() {
   const [location, setLocation] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [enabled, setEnabledState] = useState<boolean | null>(null);
 
   useEffect(() => {
+    try {
+      const stored = localStorage.getItem(LOCATION_KEY);
+      setEnabledState(stored === "true" ? true : stored === "false" ? false : null);
+    } catch {
+      setEnabledState(null);
+    }
+  }, []);
+
+  const setEnabled = (value: boolean) => {
+    setEnabledState(value);
+    try { localStorage.setItem(LOCATION_KEY, String(value)); } catch {}
+  };
+
+  useEffect(() => {
+    if (!enabled) return;
     if (!navigator.geolocation) {
       setError("Geolocation is not supported");
       return;
@@ -177,9 +195,9 @@ export function useUserLocation() {
       { enableHighAccuracy: true, maximumAge: 30000, timeout: 10000 }
     );
     return () => navigator.geolocation.clearWatch(watchId);
-  }, []);
+  }, [enabled]);
 
-  return { location, error };
+  return { location, error, locationEnabled: enabled, setLocationEnabled: setEnabled };
 }
 
 // --- Search & Filter ---

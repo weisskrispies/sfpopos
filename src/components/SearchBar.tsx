@@ -20,6 +20,7 @@ interface SearchBarProps {
   sortMode: "alpha" | "nearest";
   onSortModeChange: (m: "alpha" | "nearest") => void;
   hasLocation: boolean;
+  onEnableLocation: () => void;
   resultCount: number;
 }
 
@@ -39,6 +40,7 @@ export default function SearchBar({
   sortMode,
   onSortModeChange,
   hasLocation,
+  onEnableLocation,
   resultCount,
 }: SearchBarProps) {
   const [showFilters, setShowFilters] = useState(false);
@@ -71,12 +73,8 @@ export default function SearchBar({
           <button
             onClick={() => {
               if (sortMode === "alpha" && !hasLocation) {
-                // Request location permission
-                navigator.geolocation?.getCurrentPosition(
-                  () => onSortModeChange("nearest"),
-                  () => alert("Enable location access to sort by nearest."),
-                  { enableHighAccuracy: true }
-                );
+                onEnableLocation();
+                onSortModeChange("nearest");
               } else {
                 onSortModeChange(sortMode === "alpha" ? "nearest" : "alpha");
               }
