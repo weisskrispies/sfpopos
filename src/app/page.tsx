@@ -168,13 +168,13 @@ export default function Home() {
           <main className="flex-1 overflow-y-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
               {!heroDismissed && !search.query && !search.selectedType && !search.selectedNeighborhood && !search.showSavedOnly && !search.showVisitedOnly && !search.showNotVisitedOnly && (
-                <div className="mb-6 bg-emerald-50 rounded-xl p-4 sm:p-5 animate-fade-in">
+                <div className="mb-6 bg-stone-50 rounded-xl p-4 sm:p-5 animate-fade-in">
                   <div className="flex items-start justify-between gap-3">
                     <div className="max-w-2xl">
-                      <h1 className="font-bold text-sm sm:text-base mb-1.5">
+                      <h1 className="font-bold text-base sm:text-lg mb-1.5">
                         Discover San Francisco&apos;s Hidden Public Spaces
                       </h1>
-                      <p className="text-sm text-gray-700 leading-relaxed">
+                      <p className="text-sm text-gray-600 leading-relaxed">
                         San Francisco has over 90 privately owned public open spaces (POPOS) — rooftop gardens, plazas, terraces, and pocket parks tucked inside and around downtown buildings, all free and open to the public. This directory helps you find, explore, and track them all.
                       </p>
                     </div>
@@ -183,7 +183,7 @@ export default function Home() {
                         setHeroDismissed(true);
                         localStorage.setItem("sfpopos_hero_dismissed", "true");
                       }}
-                      className="shrink-0 mt-0.5 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-emerald-100 transition-colors"
+                      className="shrink-0 mt-0.5 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-stone-200 transition-colors"
                       aria-label="Dismiss"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
