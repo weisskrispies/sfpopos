@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { POPOS, poposData } from "@/data/popos";
-import { doc, setDoc, onSnapshot } from "firebase/firestore";
-import { getFirebaseDb, firebaseEnabled } from "./firebase";
+import { getSupabase, supabaseEnabled } from "./supabase";
 
 const ADMIN_EMAIL = "patrick.weiss@gmail.com";
-const ADMIN_DOC = "settings/admin_data";
+const TABLE = "admin_data";
+const ROW_ID = "singleton";
 
 export function isAdmin(email: string | undefined): boolean {
   if (!email) return false;
@@ -21,7 +21,6 @@ interface AdminData {
 
 const emptyAdmin: AdminData = { edits: {}, added: [], deleted: [] };
 
-// localStorage fallback keys
 const LS_EDITS = "sfpopos_admin_edits";
 const LS_ADDED = "sfpopos_admin_added";
 const LS_DELETED = "sfpopos_admin_deleted";
@@ -44,13 +43,39 @@ function saveToLocalStorage(data: AdminData) {
   localStorage.setItem(LS_DELETED, JSON.stringify(data.deleted));
 }
 
-async function saveToFirestore(data: AdminData) {
-  const fdb = getFirebaseDb();
-  if (!fdb) return;
+async function loadFromSupabase(): Promise<AdminData | null> {
+  const sb = getSupabase();
+  if (!sb) return null;
   try {
-    await setDoc(doc(fdb, ADMIN_DOC), data);
+    const { data, error } = await sb
+      .from(TABLE)
+      .select("edits, added, deleted")
+      .eq("id", ROW_ID)
+      .single();
+    if (error || !data) return null;
+    return {
+      edits: data.edits || {},
+      added: data.added || [],
+      deleted: data.deleted || [],
+    };
+  } catch {
+    return null;
+  }
+}
+
+async function saveToSupabase(adminData: AdminData) {
+  const sb = getSupabase();
+  if (!sb) return;
+  try {
+    await sb.from(TABLE).upsert({
+      id: ROW_ID,
+      edits: adminData.edits,
+      added: adminData.added,
+      deleted: adminData.deleted,
+      updated_at: new Date().toISOString(),
+    });
   } catch (e) {
-    console.error("Error saving admin data to Firestore:", e);
+    console.error("Error saving admin data to Supabase:", e);
   }
 }
 
@@ -59,52 +84,25 @@ export function useAdminEdits() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (!firebaseEnabled) {
-      setData(loadFromLocalStorage());
-      setLoaded(true);
-      return;
-    }
-
-    const fdb = getFirebaseDb();
-    if (!fdb) {
-      setData(loadFromLocalStorage());
-      setLoaded(true);
-      return;
-    }
-    // Listen for real-time updates from Firestore
-    const unsubscribe = onSnapshot(
-      doc(fdb, ADMIN_DOC),
-      (snap) => {
-        if (snap.exists()) {
-          const d = snap.data() as AdminData;
-          setData({
-            edits: d.edits || {},
-            added: d.added || [],
-            deleted: d.deleted || [],
-          });
-          // Also cache locally
-          saveToLocalStorage({
-            edits: d.edits || {},
-            added: d.added || [],
-            deleted: d.deleted || [],
-          });
+    (async () => {
+      if (supabaseEnabled) {
+        const sbData = await loadFromSupabase();
+        if (sbData) {
+          setData(sbData);
+          saveToLocalStorage(sbData);
+          setLoaded(true);
+          return;
         }
-        setLoaded(true);
-      },
-      (err) => {
-        console.error("Firestore listen error:", err);
-        // Fall back to localStorage
-        setData(loadFromLocalStorage());
-        setLoaded(true);
       }
-    );
-
-    return () => unsubscribe();
+      // Fall back to localStorage
+      setData(loadFromLocalStorage());
+      setLoaded(true);
+    })();
   }, []);
 
   const persist = useCallback((newData: AdminData) => {
     saveToLocalStorage(newData);
-    saveToFirestore(newData);
+    saveToSupabase(newData);
   }, []);
 
   const updatePopos = useCallback(
