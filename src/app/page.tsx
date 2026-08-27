@@ -213,6 +213,7 @@ export default function Home() {
             visited={visited}
             userLocation={location}
             onSelectSpace={setSelectedPopos}
+            isAdmin={isAdmin(user?.email)}
           />
         </div>
       )}

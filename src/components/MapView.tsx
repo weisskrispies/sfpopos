@@ -10,6 +10,7 @@ interface MapViewProps {
   visited: Set<string>;
   userLocation: { lat: number; lng: number } | null;
   onSelectSpace: (popos: POPOS) => void;
+  isAdmin?: boolean;
 }
 
 export default function MapView({
@@ -18,6 +19,7 @@ export default function MapView({
   visited,
   userLocation,
   onSelectSpace,
+  isAdmin,
 }: MapViewProps) {
   const [mapReady, setMapReady] = useState(false);
 
@@ -33,7 +35,7 @@ export default function MapView({
     );
   }
 
-  return <MapInner spaces={spaces} saved={saved} visited={visited} userLocation={userLocation} onSelectSpace={onSelectSpace} />;
+  return <MapInner spaces={spaces} saved={saved} visited={visited} userLocation={userLocation} onSelectSpace={onSelectSpace} isAdmin={isAdmin} />;
 }
 
 function MapInner({
@@ -42,6 +44,7 @@ function MapInner({
   visited,
   userLocation,
   onSelectSpace,
+  isAdmin,
 }: MapViewProps) {
   const [L, setL] = useState<typeof import("leaflet") | null>(null);
   const [RL, setRL] = useState<typeof import("react-leaflet") | null>(null);
@@ -84,10 +87,12 @@ function MapInner({
         ? "var(--accent)"
         : "var(--primary)";
     const emoji = getTypeEmoji(popos.type);
+    const needsPhoto = isAdmin && (!popos.images || popos.images.length === 0);
 
     return L.divIcon({
       className: "",
       html: `<div style="
+        position: relative;
         background: ${bg};
         width: 36px;
         height: 36px;
@@ -99,7 +104,20 @@ function MapInner({
         justify-content: center;
         font-size: 16px;
         cursor: pointer;
-      ">${emoji}</div>`,
+      ">${emoji}${needsPhoto ? `<span style="
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        width: 16px;
+        height: 16px;
+        background: #f59e0b;
+        border: 2px solid white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 8px;
+      ">📷</span>` : ""}</div>`,
       iconSize: [36, 36],
       iconAnchor: [18, 18],
       popupAnchor: [0, -20],
