@@ -168,26 +168,30 @@ export default function Home() {
           <main className="flex-1 overflow-y-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
               {!heroDismissed && !search.query && !search.selectedType && !search.selectedNeighborhood && !search.showSavedOnly && !search.showVisitedOnly && !search.showNotVisitedOnly && (
-                <div className="mb-6 relative border border-[var(--border)] rounded-xl p-5 pr-10">
-                  <button
-                    onClick={() => {
-                      setHeroDismissed(true);
-                      localStorage.setItem("sfpopos_hero_dismissed", "true");
-                    }}
-                    className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full text-[var(--muted)] hover:bg-gray-100 hover:text-[var(--foreground)] transition-colors"
-                    aria-label="Dismiss"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                  </button>
-                  <h1 className="text-2xl sm:text-3xl font-bold mb-2">
-                    Discover San Francisco&apos;s Hidden Public Spaces
-                  </h1>
-                  <p className="text-sm sm:text-base text-[var(--muted)] leading-relaxed max-w-2xl">
-                    San Francisco has over 90 privately owned public open spaces (POPOS) — rooftop gardens, plazas, terraces, and pocket parks tucked inside and around downtown buildings, all free and open to the public. This directory helps you find, explore, and track them all.
-                  </p>
+                <div className="mb-6 bg-emerald-50 rounded-xl p-4 sm:p-5 animate-fade-in">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="max-w-2xl">
+                      <h1 className="font-bold text-sm sm:text-base mb-1.5">
+                        Discover San Francisco&apos;s Hidden Public Spaces
+                      </h1>
+                      <p className="text-sm text-gray-700 leading-relaxed">
+                        San Francisco has over 90 privately owned public open spaces (POPOS) — rooftop gardens, plazas, terraces, and pocket parks tucked inside and around downtown buildings, all free and open to the public. This directory helps you find, explore, and track them all.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        setHeroDismissed(true);
+                        localStorage.setItem("sfpopos_hero_dismissed", "true");
+                      }}
+                      className="shrink-0 mt-0.5 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-emerald-100 transition-colors"
+                      aria-label="Dismiss"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               )}
               {filteredSpaces.length === 0 ? (

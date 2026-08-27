@@ -287,8 +287,9 @@ export default function Header({
 
       {/* About Section (expandable) */}
       {showAbout && (
-        <div className="border-t border-[var(--border)] bg-amber-50 animate-fade-in">
+        <div className="border-t border-[var(--border)] bg-emerald-50 animate-fade-in">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+            <div className="flex items-start justify-between gap-3">
             <div className="max-w-2xl">
               <h3 className="font-bold text-sm mb-2">
                 San Francisco&apos;s Best-Kept Secret: Hidden Parks Everywhere
@@ -325,6 +326,17 @@ export default function Header({
                 </a>
                 . Built with love for the city.
               </p>
+            </div>
+            <button
+              onClick={onToggleAbout}
+              className="shrink-0 mt-0.5 p-1.5 rounded-full text-gray-400 hover:text-gray-600 hover:bg-emerald-100 transition-colors"
+              aria-label="Close"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
             </div>
           </div>
         </div>
