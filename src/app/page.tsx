@@ -30,6 +30,11 @@ export default function Home() {
   const [creatingNew, setCreatingNew] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
+  const [heroDismissed, setHeroDismissed] = useState(true);
+
+  useEffect(() => {
+    setHeroDismissed(localStorage.getItem("sfpopos_hero_dismissed") === "true");
+  }, []);
 
   const { saved, visited, toggleSaved, toggleVisited, setUid } = useSavedPopos();
   const { location, locationEnabled, setLocationEnabled } = useUserLocation();
@@ -162,8 +167,21 @@ export default function Home() {
           />
           <main className="flex-1 overflow-y-auto">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">
-              {!search.query && !search.selectedType && !search.selectedNeighborhood && !search.showSavedOnly && !search.showVisitedOnly && !search.showNotVisitedOnly && (
-                <div className="mb-6">
+              {!heroDismissed && !search.query && !search.selectedType && !search.selectedNeighborhood && !search.showSavedOnly && !search.showVisitedOnly && !search.showNotVisitedOnly && (
+                <div className="mb-6 relative border border-[var(--border)] rounded-xl p-5 pr-10">
+                  <button
+                    onClick={() => {
+                      setHeroDismissed(true);
+                      localStorage.setItem("sfpopos_hero_dismissed", "true");
+                    }}
+                    className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center rounded-full text-[var(--muted)] hover:bg-gray-100 hover:text-[var(--foreground)] transition-colors"
+                    aria-label="Dismiss"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
                   <h1 className="text-2xl sm:text-3xl font-bold mb-2">
                     Discover San Francisco&apos;s Hidden Public Spaces
                   </h1>
