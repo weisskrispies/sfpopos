@@ -52,6 +52,10 @@ body {
   z-index: 0;
 }
 
+.grayscale-tiles {
+  filter: grayscale(1) brightness(1.05) contrast(0.9);
+}
+
 .leaflet-popup-content-wrapper {
   border-radius: 12px;
   box-shadow: var(--card-shadow);

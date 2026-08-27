@@ -67,7 +67,8 @@ export default function DetailMap({ lat, lng, name }: DetailMapProps) {
         attributionControl={false}
       >
         <TileLayer
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}"
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          className="grayscale-tiles"
         />
         <Marker position={[lat, lng]} icon={icon} />
       </MapContainer>
