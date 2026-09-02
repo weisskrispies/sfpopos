@@ -169,9 +169,23 @@ export function useUserLocation() {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(LOCATION_KEY);
-      setEnabledState(stored === "true" ? true : stored === "false" ? false : null);
+      if (stored === "true") {
+        setEnabledState(true);
+      } else if (stored === "false") {
+        setEnabledState(false);
+      } else {
+        // First visit — check if user has other sfpopos data (returning user
+        // whose localStorage key was purged by iOS). Only show the banner for
+        // genuinely new users.
+        const hasExistingData =
+          localStorage.getItem("sfpopos_user") ||
+          localStorage.getItem("sfpopos_saved") ||
+          localStorage.getItem("sfpopos_visited") ||
+          localStorage.getItem("sfpopos_hero_dismissed");
+        setEnabledState(hasExistingData ? false : null);
+      }
     } catch {
-      setEnabledState(null);
+      setEnabledState(false);
     }
   }, []);
 
