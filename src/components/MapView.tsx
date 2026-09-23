@@ -138,6 +138,12 @@ function MapInner({
     iconAnchor: [9, 9],
   });
 
+  const stadiaKey = process.env.NEXT_PUBLIC_STADIA_API_KEY;
+  const tileUrl = stadiaKey
+    ? `https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=${stadiaKey}`
+    : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  const tileClass = stadiaKey ? "" : "grayscale-tiles";
+
   return (
     <MapContainer
       center={center}
@@ -147,8 +153,8 @@ function MapInner({
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        className="grayscale-tiles"
+        url={tileUrl}
+        className={tileClass}
       />
 
       {/* User location - only shown if user is in SF area */}

@@ -53,6 +53,12 @@ export default function DetailMap({ lat, lng, name }: DetailMapProps) {
     iconAnchor: [16, 32],
   });
 
+  const stadiaKey = process.env.NEXT_PUBLIC_STADIA_API_KEY;
+  const tileUrl = stadiaKey
+    ? `https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png?api_key=${stadiaKey}`
+    : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+  const tileClass = stadiaKey ? "" : "grayscale-tiles";
+
   return (
     <div className="w-full h-48 rounded-xl overflow-hidden border border-[var(--border)]">
       <MapContainer
@@ -67,8 +73,8 @@ export default function DetailMap({ lat, lng, name }: DetailMapProps) {
         attributionControl={false}
       >
         <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          className="grayscale-tiles"
+          url={tileUrl}
+          className={tileClass}
         />
         <Marker position={[lat, lng]} icon={icon} />
       </MapContainer>
