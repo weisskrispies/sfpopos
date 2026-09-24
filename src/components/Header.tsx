@@ -99,10 +99,10 @@ export default function Header({
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-[var(--border)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-end justify-between h-14 pb-1.5">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <div className="flex items-end gap-2">
-            <img src="/logo.png" alt="SF Hidden Parks" className="w-10 h-10" />
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="SF Hidden Parks" className="w-9 h-9" />
             <button
               onClick={onToggleAbout}
               className="text-lg font-bold tracking-tight sm:pointer-events-none"
@@ -111,7 +111,7 @@ export default function Header({
             </button>
             <button
               onClick={onToggleAbout}
-              className={`ml-1 p-1 rounded-full transition-colors hidden sm:block ${
+              className={`p-1 rounded-full transition-colors hidden sm:block ${
                 showAbout
                   ? "text-[var(--primary)] bg-red-50"
                   : "text-[var(--muted)] hover:text-[var(--foreground)]"
