@@ -97,12 +97,12 @@ export default function Header({
   const progressPct = totalCount > 0 ? Math.round((visitedCount / totalCount) * 100) : 0;
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-[var(--border)]">
+    <header className="sticky top-0 z-50 bg-white border-b border-[var(--border)] overflow-visible">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <img src="/logo.png" alt="SF Hidden Parks" className="w-11 h-11 self-end -mb-px" />
+          <div className="flex items-end gap-2">
+            <img src="/logo.png" alt="SF Hidden Parks" className="w-11 h-11 -mt-3" />
             <button
               onClick={onToggleAbout}
               className="text-lg font-bold tracking-tight sm:pointer-events-none"
