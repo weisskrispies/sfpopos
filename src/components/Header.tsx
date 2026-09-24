@@ -111,14 +111,14 @@ export default function Header({
             </button>
             <button
               onClick={onToggleAbout}
-              className={`p-1 rounded-full transition-colors hidden sm:block ${
+              className={`p-0.5 rounded-full transition-colors hidden sm:flex items-center justify-center ${
                 showAbout
                   ? "text-[var(--primary)] bg-red-50"
                   : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
               title="About POPOS"
             >
-              <Info className="w-4 h-4" />
+              <Info className="w-[18px] h-[18px]" />
             </button>
           </div>
 
